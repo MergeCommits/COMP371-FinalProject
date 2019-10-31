@@ -148,13 +148,6 @@ void Car::addRotationZ(float bruh) {
     }
 }
 
-void Car::addTireRotation(float bruh) {
-    tireRotation = MathUtil::clampFloat(tireRotation + bruh, -1.f, 1.f);
-    for (int i = 0; i < 4; i++) {
-        wheels[i]->setTireRotation(tireRotation);
-    }
-}
-
 void Car::setRenderingMode(GLenum mode) {
     renderingMode = mode;
 }
@@ -162,7 +155,7 @@ void Car::setRenderingMode(GLenum mode) {
 void Car::walk(Car::WalkInput input, float speed) {
     if (input == WalkInput::None) { return; }
     
-    float sinAngle = std::sin(-rotation.y); // Invert this to use the correct coordinate system.
+    float sinAngle = std::sin(-rotation.y); // Negative this to use the correct coordinate system.
     float cosAngle = std::cos(rotation.y);
     
     Vector2f targetDir = Vector2f::zero;
@@ -180,11 +173,29 @@ void Car::walk(Car::WalkInput input, float speed) {
             wheels[i]->addRotationX(speed);
         }
     }
+    
+    float tireRot = 0.f;
+    float lazyReturnThreshold = 0.15f;
     if ((input & WalkInput::Left) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(-cosAngle,sinAngle));
+        tireRot += speed;
     }
     if ((input & WalkInput::Right) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(cosAngle,-sinAngle));
+        tireRot -= speed;
+    }
+    
+    if (MathUtil::eqFloats(tireRot, 0.f)) {
+        if (tireRotation > 0.f) {
+            tireRotation = MathUtil::clampFloat(tireRotation - lazyReturnThreshold, 0.f, tireRotation);
+        } else if (tireRotation < 0.f) {
+            tireRotation = MathUtil::clampFloat(tireRotation + lazyReturnThreshold, tireRotation, 0.f);
+        }
+    } else {
+        tireRotation += tireRot;
+    }
+    
+    tireRotation = MathUtil::clampFloat(tireRotation, -1.f, 1.f);
+    for (int i = 0; i < 4; i++) {
+        wheels[i]->setTireRotation(tireRotation);
     }
     
     if (targetDir.lengthSquared() < 0.01f) { return; }

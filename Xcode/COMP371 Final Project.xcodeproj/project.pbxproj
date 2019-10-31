@@ -28,6 +28,7 @@
 		193AD10E232A94BC007879F4 /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD10D232A94BC007879F4 /* Triangle.cpp */; };
 		19624A5323463662006291CE /* Shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = 19624A5223463651006291CE /* Shaders */; };
 		197123C82347F9F3006A7739 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 197123C72347F9F3006A7739 /* Texture.cpp */; };
+		1980EDAB236B07CD003AF87E /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1980EDAA236B07CD003AF87E /* Player.cpp */; };
 		198CE12A232AFD6E009C2FBF /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 198CE128232AFD6E009C2FBF /* Camera.cpp */; };
 		19BF9A60232DE8FA00FF13A1 /* Axis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19BF9A5E232DE8FA00FF13A1 /* Axis.cpp */; };
 		19D8A23A2352E0F6005F224D /* Wheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19D8A2392352E0F6005F224D /* Wheel.cpp */; };
@@ -85,6 +86,8 @@
 		19624A5223463651006291CE /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 		197123C62347F9F3006A7739 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		197123C72347F9F3006A7739 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		1980EDA9236B07CD003AF87E /* Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		1980EDAA236B07CD003AF87E /* Player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		198CE128232AFD6E009C2FBF /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		198CE129232AFD6E009C2FBF /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		19BF9A5E232DE8FA00FF13A1 /* Axis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Axis.cpp; sourceTree = "<group>"; };
@@ -154,6 +157,7 @@
 				193AD0E5232A8276007879F4 /* Main.cpp */,
 				193AD0E4232A8276007879F4 /* Timing.cpp */,
 				193AD0D7232A8276007879F4 /* Timing.h */,
+				1980EDA8236B07BA003AF87E /* Controllers */,
 				193AD0F3232A83CE007879F4 /* Graphics */,
 				193AD0D8232A8276007879F4 /* Utils */,
 				193AD0DD232A8276007879F4 /* Math */,
@@ -224,6 +228,15 @@
 			path = Graphics;
 			sourceTree = "<group>";
 		};
+		1980EDA8236B07BA003AF87E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1980EDAA236B07CD003AF87E /* Player.cpp */,
+				1980EDA9236B07CD003AF87E /* Player.h */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -258,7 +271,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0371ABC61A6EAF2E00029CF8 /* Build configuration list for PBXProject "COMP371 A2" */;
+			buildConfigurationList = 0371ABC61A6EAF2E00029CF8 /* Build configuration list for PBXProject "COMP371 Final Project" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -283,6 +296,7 @@
 			files = (
 				197123C82347F9F3006A7739 /* Texture.cpp in Sources */,
 				193AD0E8232A8276007879F4 /* MathUtil.cpp in Sources */,
+				1980EDAB236B07CD003AF87E /* Player.cpp in Sources */,
 				193AD0EC232A8276007879F4 /* Main.cpp in Sources */,
 				198CE12A232AFD6E009C2FBF /* Camera.cpp in Sources */,
 				19F67BB223498A9100A02E77 /* Quad.cpp in Sources */,
@@ -453,7 +467,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0371ABC61A6EAF2E00029CF8 /* Build configuration list for PBXProject "COMP371 A2" */ = {
+		0371ABC61A6EAF2E00029CF8 /* Build configuration list for PBXProject "COMP371 Final Project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0371ABD01A6EAF2E00029CF8 /* Debug */,

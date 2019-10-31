@@ -1,24 +1,14 @@
-//
-// COMP 371 Assignment Framework
-//
-// Created by Nicolas Bergeron on 20/06/2019.
-//
-// Inspired by the following tutorials:
-// - https://learnopengl.com/Getting-started/Hello-Window
-// - https://learnopengl.com/Getting-started/Hello-Triangle
-
 #include <iostream>
 #include <fstream>
 #include <ctime>
 
-#define GLEW_STATIC 1   // This allows linking with Static Library on Windows, without DLL
-#include <GL/glew.h>    // Include GLEW - OpenGL Extension Wrangler
+#define GLEW_STATIC 1
+#include <GL/glew.h>
 
-#include <GLFW/glfw3.h> // GLFW provides a cross-platform interface for creating a graphical context,
-                        // initializing OpenGL and binding inputs
+#include <GLFW/glfw3.h>
 
 #include "Timing.h"
-#include "Graphics/Car.h"
+#include "Controllers/Player.h"
 #include "Graphics/Grid.h"
 #include "Graphics/Quad.h"
 #include "Graphics/Axis.h"
@@ -49,7 +39,7 @@ bool debugDepthMap = false;
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void windowSizeCallback(GLFWwindow* window, int w, int h);
-void updateInputs(float timestep, GLFWwindow* window, Car* car, Camera* cam);
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam);
 
 int main() {
     // Give std::rand the current time as a seed.
@@ -138,10 +128,11 @@ int main() {
     if (err != GL_NO_ERROR) {
         throw std::runtime_error("Failed to create shaders.");
     }
+    
+    Player* player = new Player(defaultShader);
 
     // Models.
-    Car* car = new Car(depthPassShader);
-    car->addRotationY(MathUtil::PI / -2.f);
+
     // 100x100 grid.
     Grid* grid = new Grid(depthPassShader);
     grid->scale = Vector3f(50.f, 1.f, 50.f);
@@ -192,12 +183,15 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         while (timing->tickReady()) {
+            float timestep = (float)timing->getTimeStep();
+            
             // Detect inputs.
             mouseXDiff = 0.f;
             mouseYDiff = 0.f;
             glfwPollEvents();
             
-            updateInputs((float)timing->getTimeStep(), window, car, cam);
+            updateInputs(timestep, window, cam);
+            player->update(timestep, window);
             
             timing->subtractTick();
         }
@@ -225,8 +219,8 @@ int main() {
             
             grid->setShader(depthPassShader);
             grid->render();
-            car->setShader(depthPassShader);
-            car->render();
+            player->setShader(depthPassShader);
+            player->render();
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
             // Reset viewport.
@@ -252,8 +246,8 @@ int main() {
             grass->activate(1);
             grid->setShader(shadowPassShader);
             grid->render();
-            car->setShader(shadowPassShader);
-            car->render();
+            player->setShader(shadowPassShader);
+            player->render();
 
             glDisable(GL_DEPTH_TEST);
             xAxis->render();
@@ -279,7 +273,7 @@ int main() {
 
     delete cam;
     delete light;
-    delete car;
+    delete player;
     delete grid;
     delete xAxis;
     delete yAxis;
@@ -335,69 +329,11 @@ static bool inputHit(GLFWwindow* window, int key, int& lastKeyState) {
     return false;
 }
 
-void updateInputs(float timestep, GLFWwindow* window, Car* car, Camera* cam) {
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam) {
     // Cursor position.
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
         return;
-    }
-    
-    // Teleport.
-    if (inputHit(window, GLFW_KEY_SPACE, lastKeySpaceState)) {
-        car->addPositionXZ(Vector2f((std::rand() % 4) - 1.5f, (std::rand() % 4) - 1.5f));
-    }
-    
-    // Movement.
-    float speed = 5.f;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        speed += 15.f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-        speed = 2.f;
-    }
-    
-    Car::WalkInput input = Car::WalkInput::None;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        input = input | Car::WalkInput::Forward;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        input = input | Car::WalkInput::Backward;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        input = input | Car::WalkInput::Left;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        input = input | Car::WalkInput::Right;
-    }
-    car->walk(input, timestep * speed);
-    
-    
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-        car->addTireRotation(timestep * speed);
-//        car->addRotationY(timestep * speed);
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-        car->addTireRotation(timestep * -speed);
-//        car->addRotationY(timestep * -speed);
-    }
-    
-    // Scale.
-    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-        car->addScale(timestep * 2.f);
-    }
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-        car->addScale(timestep * -2.f);
-    }
-    
-    // Change how the car is rendered.
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        car->setRenderingMode(GL_POINT);
-    }
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-        car->setRenderingMode(GL_LINE);
-    }
-    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
-        car->setRenderingMode(GL_FILL);
     }
     
     // Toggle textures.
@@ -415,34 +351,5 @@ void updateInputs(float timestep, GLFWwindow* window, Car* car, Camera* cam) {
         debugDepthMap = !debugDepthMap;
     }
     
-    // Camera orientation.
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        cam->addAngle(timestep * -5.f, 0.f);
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        cam->addAngle(timestep * 5.f, 0.f);
-    }
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        cam->addAngle(0.f, timestep * -5.f);
-    }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        cam->addAngle(0.f, timestep * 5.f);
-    }
-    
-    // Reset camera position and orientation.
-    if (glfwGetKey(window, GLFW_KEY_HOME) == GLFW_PRESS) {
-        cam->setPosition(Vector3f(0.f, 5.f, -10.f));
-        cam->resetAngle();
-    }
-    
-    // Use mouse movement to manipulate the camera.
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        cam->addFov(mouseYDiff * 2.f);
-    }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
-        cam->addAngle(mouseXDiff, 0.f);
-    }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS) {
-        cam->addAngle(0.f, mouseYDiff);
-    }
+    cam->addAngle(mouseXDiff, mouseYDiff);
 }
