@@ -22,6 +22,8 @@ Camera::Camera(int w, int h, float fov, float nearZ, float farZ, bool orthograph
     this->width = w;
     this->height = h;
     this->orthographicProj = orthographic;
+    this->thirdPerson = true;
+    this->thirdPersonRadius = 5.f;
 
     rotation = Matrix4x4f::identity;
 
@@ -53,9 +55,21 @@ void Camera::update() {
         throw std::runtime_error("Uncaught exception - Camera::update().");
     }
     if (needsViewUpdate) {
-        rotation = Matrix4x4f::constructWorldMat(Vector3f(0.f, 0.f, 0.f), Vector3f(1.f, 1.f, 1.f), Vector3f(-yAngle, xAngle, tilt));
-
-        viewMatrix = Matrix4x4f::constructViewMat(position, rotation.transform(lookAt), rotation.transform(upDir));
+        if (!thirdPerson) {
+            rotation = Matrix4x4f::rotate(Vector3f(-yAngle, xAngle, tilt));
+            viewMatrix = Matrix4x4f::constructViewMat(position, rotation.transform(lookAt), rotation.transform(upDir));
+        } else {
+            float cosXAngle = std::cos(xAngle);
+            float cosYAngle = std::cos(yAngle);
+            float sinXAngle = std::sin(xAngle);
+            float sinYAngle = std::sin(yAngle);
+            
+            Vector3f thirdPersonPosition = position.subtract(Vector3f(thirdPersonRadius * cosYAngle * cosXAngle,
+                                                                      thirdPersonRadius * sinYAngle,
+                                                                      -thirdPersonRadius * cosYAngle * sinXAngle));
+            
+            viewMatrix = Matrix4x4f::constructViewMat(thirdPersonPosition, position.subtract(thirdPersonPosition).normalize(), upDir);
+        }
 
         // Update shaders.
         for (int i = 0; i < (int)shaders.size(); i++) {
@@ -124,6 +138,11 @@ void Camera::resetAngle() {
     yAngle = 0.f;
     
     needsViewUpdate = true;
+}
+
+void Camera::setThirdPersonPerspective(bool bruh) {
+    needsViewUpdate = bruh != thirdPerson;
+    thirdPerson = bruh;
 }
 
 void Camera::addFov(float deg) {

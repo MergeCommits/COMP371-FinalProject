@@ -19,6 +19,8 @@ private:
     float fov;
     // Perspective or Orthographic matrix.
     bool orthographicProj;
+    bool thirdPerson;
+    float thirdPersonRadius;
 
     bool needsViewUpdate;
     bool needsProjUpdate;
@@ -49,6 +51,7 @@ public:
     void setTilt(float rad);
     void addAngle(float xAngle, float yAngle);
     void resetAngle();
+    void setThirdPersonPerspective(bool bruh);
     
     void addFov(float deg);
     void setXYClippings(int w, int h);
