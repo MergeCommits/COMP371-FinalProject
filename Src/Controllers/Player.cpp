@@ -4,17 +4,24 @@
 
 #include "Player.h"
 #include "../Graphics/Shader.h"
+#include "../Graphics/Camera.h"
 #include "../Graphics/Car.h"
 
-Player::Player(Shader* shd) {
+Player::Player(Shader* shd, int camWidth, int camHeight) {
     car = new Car(shd);
+    camera = new Camera(camWidth, camHeight);
 }
 
 Player::~Player() {
+    delete camera;
     delete car;
 }
 
-void Player::setShader(Shader* shd) {
+Camera* Player::getCamera() const {
+    return camera;
+}
+
+void Player::setCarShader(Shader* shd) {
     car->setShader(shd);
 }
 

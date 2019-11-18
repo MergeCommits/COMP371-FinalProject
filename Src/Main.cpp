@@ -93,10 +93,6 @@ int main() {
     // Fixed time steps.
     Timing* timing = new Timing(60);
     
-    // Cameras.
-    Camera* cam = new Camera(width, height);
-    cam->setPosition(Vector3f(0.f, 5.f, -20.f));
-    
     bool directionalShadow = false;
     float nearZ = directionalShadow ? 1.f : 20.f;
     Camera* light = new Camera(100, 100, MathUtil::degToRad(115.f), nearZ, 40.f, directionalShadow);
@@ -107,7 +103,6 @@ int main() {
     Shader* defaultShader = new Shader("Shaders/default/");
     defaultShader->addVec3VertexInput("position");
     defaultShader->addVec3VertexInput("normal");
-    cam->addShader(defaultShader);
     
     Shader* imageShader = new Shader("Shaders/Image/");
     imageShader->addVec2VertexInput("position");
@@ -122,14 +117,17 @@ int main() {
     shadowPassShader->addVec3VertexInput("position");
     shadowPassShader->addVec3VertexInput("normal");
     shadowPassShader->addVec2VertexInput("uv");
-    cam->addShader(shadowPassShader);
     
     GLuint err = glGetError();
     if (err != GL_NO_ERROR) {
         throw std::runtime_error("Failed to create shaders.");
     }
     
-    Player* player = new Player(defaultShader);
+    // Players.
+    Player* player = new Player(defaultShader, width, height);
+    player->getCamera()->setPosition(Vector3f(0.f, 5.f, -20.f));
+    player->getCamera()->addShader(defaultShader);
+    player->getCamera()->addShader(shadowPassShader);
 
     // Models.
 
@@ -201,7 +199,7 @@ int main() {
         
         // If the aspect ratio was changed then update the camera's size.
         if (!MathUtil::eqFloats(cam->getAspectRatio(), (float)width / height)) {
-            cam->setXYClippings(width, height);
+            player->getCamera()->setXYClippings(width, height);
         }
         
         cam->update();
@@ -219,7 +217,7 @@ int main() {
             
             grid->setShader(depthPassShader);
             grid->render();
-            player->setShader(depthPassShader);
+            player->setCarShader(depthPassShader);
             player->render();
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -237,7 +235,7 @@ int main() {
             // Render the scene from the camera's position.
             shadowPassShader->getBoolUniform("enableShadows")->setValue(enableShadows);
             shadowPassShader->getBoolUniform("enableTextures")->setValue(enableTextures);
-            shadowPassShader->getVec3fUniform("cameraPosition")->setValue(cam->getPosition());
+            shadowPassShader->getVec3fUniform("cameraPosition")->setValue(player->getCamera()->getPosition());
             shadowPassShader->getVec3fUniform("lightPosition")->setValue(light->getPosition());
             shadowPassShader->getMat4Uniform("lightViewMatrix")->setValue(light->getViewMatrix());
             shadowPassShader->getMat4Uniform("lightProjectionMatrix")->setValue(light->getProjectionMatrix());
@@ -246,7 +244,7 @@ int main() {
             grass->activate(1);
             grid->setShader(shadowPassShader);
             grid->render();
-            player->setShader(shadowPassShader);
+            player->setCarShader(shadowPassShader);
             player->render();
 
             glDisable(GL_DEPTH_TEST);
@@ -271,7 +269,6 @@ int main() {
         timing->addSecondsToAccumulator(secondsPassed);
     }
 
-    delete cam;
     delete light;
     delete player;
     delete grid;
