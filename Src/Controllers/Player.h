@@ -3,13 +3,15 @@
 
 class Camera;
 class Car;
-class GLFWwindow;
+struct GLFWwindow;
 class Shader;
 
 class Player {
 private:
     Camera* camera;
     Car* car;
+
+	bool cameraFollowingCar;
     
 public:
     Player(Shader* shd, int camWidth, int camHeight);

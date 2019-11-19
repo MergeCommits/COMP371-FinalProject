@@ -10,6 +10,8 @@
 Player::Player(Shader* shd, int camWidth, int camHeight) {
     car = new Car(shd);
     camera = new Camera(camWidth, camHeight);
+
+	cameraFollowingCar = true;
 }
 
 Player::~Player() {
@@ -49,6 +51,8 @@ void Player::update(float timestep, GLFWwindow* window) {
         input = input | Car::WalkInput::Right;
     }
     car->walk(input, timestep * speed);
+
+	camera->update();
 }
 
 void Player::render() const {

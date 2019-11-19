@@ -19,7 +19,6 @@ private:
     float tireRotation;
     GLenum renderingMode;
     
-    
     Texture* metalTexture;
     Texture* tireTexture;
     

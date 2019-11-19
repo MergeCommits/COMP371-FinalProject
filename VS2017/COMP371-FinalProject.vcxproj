@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\Controllers\Player.cpp" />
     <ClCompile Include="..\Src\Graphics\Axis.cpp" />
     <ClCompile Include="..\Src\Graphics\Camera.cpp" />
     <ClCompile Include="..\Src\Graphics\Car.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="..\Src\Utils\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Src\Controllers\Player.h" />
     <ClInclude Include="..\Src\Graphics\Axis.h" />
     <ClInclude Include="..\Src\Graphics\Camera.h" />
     <ClInclude Include="..\Src\Graphics\Car.h" />

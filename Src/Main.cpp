@@ -188,8 +188,10 @@ int main() {
             mouseYDiff = 0.f;
             glfwPollEvents();
             
-            updateInputs(timestep, window, cam);
+            updateInputs(timestep, window, player->getCamera());
             player->update(timestep, window);
+
+			light->update();
             
             timing->subtractTick();
         }
@@ -198,12 +200,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // If the aspect ratio was changed then update the camera's size.
-        if (!MathUtil::eqFloats(cam->getAspectRatio(), (float)width / height)) {
+        if (!MathUtil::eqFloats(player->getCamera()->getAspectRatio(), (float)width / height)) {
             player->getCamera()->setXYClippings(width, height);
         }
-        
-        cam->update();
-        light->update();
         
         // Render scene from light's point of view into a depth map.
         if (enableShadows) {

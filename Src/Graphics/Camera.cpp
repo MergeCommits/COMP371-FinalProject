@@ -13,7 +13,7 @@ Camera::Camera(int w, int h, float fov, float nearZ, float farZ, bool orthograph
 
     xAngle = 0.f;
     yAngle = 0.f;
-    yAngleLimit = MathUtil::PI / 2.f;
+    yAngleLimit = 1.5f;
     tilt = 0.f;
 
     this->nearPlaneZ = nearZ;

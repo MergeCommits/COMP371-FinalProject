@@ -56,7 +56,6 @@ public:
     void addFov(float deg);
     void setXYClippings(int w, int h);
     void setZClippings(float nearZ, float farZ);
-    void setAspectRatio(float ratio);
     float getAspectRatio() const;
     void setOrthographicProj(bool bruh);
 };

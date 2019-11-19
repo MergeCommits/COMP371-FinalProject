@@ -13,6 +13,9 @@
     <Filter Include="Src\Utils">
       <UniqueIdentifier>{03fb72b8-7d44-4d32-b867-66bb610c3ed9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Controllers">
+      <UniqueIdentifier>{b0881b22-0ab1-45ec-99bc-003dc812566a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Main.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="..\Src\Graphics\Wheel.cpp">
       <Filter>Src\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Src\Controllers\Player.cpp">
+      <Filter>Src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Timing.h">
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\Src\Graphics\Wheel.h">
       <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Controllers\Player.h">
+      <Filter>Src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
