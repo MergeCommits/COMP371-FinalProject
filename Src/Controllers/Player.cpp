@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Camera.h"
-#include "../Graphics/Car.h"
+#include "../Objects/Car.h"
 
 Player::Player(Shader* shd, int camWidth, int camHeight) {
     car = new Car(shd);

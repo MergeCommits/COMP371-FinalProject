@@ -62,7 +62,8 @@ private:
     Vector3f rotation;
 
     Mesh* mesh;
-    Shader::Uniform* worldMat;
+    Matrix4x4f worldMatrix;
+    Shader::Uniform* worldMatUniform;
     Shader::Uniform* colorUniform;
 
 public:
@@ -80,6 +81,10 @@ public:
     void addRotationZ(float bruh);
 
     void setShader(Shader* shd);
+    
+    void constructWorldMat();
+    void constructWorldMat(const Vector3f& origin);
+    Matrix4x4f getWorldMatrix() const;
 
     void render();
     void render(const Vector3f& origin);

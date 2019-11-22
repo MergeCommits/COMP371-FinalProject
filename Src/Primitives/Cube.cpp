@@ -72,13 +72,30 @@ void Cube::addRotationZ(float bruh) {
 
 void Cube::setShader(Shader* shd) {
     mesh->setShader(shd);
-    worldMat = shd->getMat4Uniform("modelMatrix");
+    worldMatUniform = shd->getMat4Uniform("modelMatrix");
     colorUniform = shd->getVec4fUniform("fsColor");
 }
 
+void Cube::constructWorldMat() {
+    worldMatrix = Matrix4x4f::constructWorldMat(position, scale, rotation);
+}
+
+void Cube::constructWorldMat(const Vector3f& origin) {
+    Matrix4x4f scaleRelativeToOrigin = Matrix4x4f::scale(scaleOrigin, origin);
+    Matrix4x4f scaleRelativeToCube = Matrix4x4f::scale(scale);
+    Matrix4x4f rotateRelativeToOrigin = Matrix4x4f::rotate(rotationOrigin, origin);
+    Matrix4x4f rotateRelativeToCube = Matrix4x4f::rotate(rotation, Vector3f(0.f, 0.5f, 0.f));
+    
+    worldMatrix = scaleRelativeToCube.product(rotateRelativeToCube.product(Matrix4x4f::translate(position).product(scaleRelativeToOrigin.product(rotateRelativeToOrigin))));
+}
+
+Matrix4x4f Cube::getWorldMatrix() const {
+    return worldMatrix;
+}
+
 void Cube::render() {
-    Matrix4x4f mat = Matrix4x4f::constructWorldMat(position, scale, rotation);
-    worldMat->setValue(mat);
+    constructWorldMat();
+    worldMatUniform->setValue(worldMatrix);
     colorUniform->setValue(color);
     glCullFace(GL_FRONT);
     mesh->render();
@@ -87,16 +104,9 @@ void Cube::render() {
 }
 
 void Cube::render(const Vector3f& origin) {
-    Matrix4x4f scaleRelativeToOrigin = Matrix4x4f::scale(scaleOrigin, origin);
-    Matrix4x4f scaleRelativeToCube = Matrix4x4f::scale(scale);
-    Matrix4x4f rotateRelativeToOrigin = Matrix4x4f::rotate(rotationOrigin, origin);
-    Matrix4x4f rotateRelativeToCube = Matrix4x4f::rotate(rotation, Vector3f(0.f, 0.5f, 0.f));
+    constructWorldMat(origin);
     
-    Matrix4x4f mat = scaleRelativeToCube.product(rotateRelativeToCube.product(Matrix4x4f::translate(position).product(scaleRelativeToOrigin.product(rotateRelativeToOrigin))));
-    worldMat->setValue(mat);
-    
-    
-    worldMat->setValue(mat);
+    worldMatUniform->setValue(worldMatrix);
     colorUniform->setValue(color);
     glCullFace(GL_FRONT);
     mesh->render();

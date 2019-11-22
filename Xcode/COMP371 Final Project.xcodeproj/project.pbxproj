@@ -14,9 +14,16 @@
 		038B791E1A6FF3EB00111E36 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 038B791D1A6FF3EB00111E36 /* IOKit.framework */; };
 		03CF97D11B56DF9A00F60482 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CF97D01B56DF9A00F60482 /* libfreeimage.a */; };
 		03DA72D222B02FC5009C7A21 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA72D122B02FC5009C7A21 /* libGLEW.a */; };
-		190B8FBE232C086D00F96298 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 190B8FBD232C086D00F96298 /* Grid.cpp */; };
-		19240964232B292B0062AC03 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19240963232B292B0062AC03 /* Cube.cpp */; };
-		19240967232B30540062AC03 /* Car.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19240966232B30540062AC03 /* Car.cpp */; };
+		19227530238898C700A1335C /* Line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922752C238898C700A1335C /* Line.cpp */; };
+		19227531238898C700A1335C /* Rectangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922752E238898C700A1335C /* Rectangle.cpp */; };
+		1922753523889AA800A1335C /* RectCollider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753423889AA800A1335C /* RectCollider.cpp */; };
+		1922754323889B3800A1335C /* Axis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753823889B3800A1335C /* Axis.cpp */; };
+		1922754423889B3800A1335C /* Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753A23889B3800A1335C /* Quad.cpp */; };
+		1922754523889B3800A1335C /* Wheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753E23889B3800A1335C /* Wheel.cpp */; };
+		1922754623889B3800A1335C /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753F23889B3800A1335C /* Grid.cpp */; };
+		1922754723889B3800A1335C /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922754023889B3800A1335C /* Triangle.cpp */; };
+		1922754823889B3800A1335C /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922754223889B3800A1335C /* Cube.cpp */; };
+		1922754C23889CD900A1335C /* Car.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922754A23889CD900A1335C /* Car.cpp */; };
 		193AD0E6232A8276007879F4 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD0D9232A8276007879F4 /* String.cpp */; };
 		193AD0E8232A8276007879F4 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD0DF232A8276007879F4 /* MathUtil.cpp */; };
 		193AD0E9232A8276007879F4 /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD0E0232A8276007879F4 /* Vector.cpp */; };
@@ -25,14 +32,10 @@
 		193AD0EC232A8276007879F4 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD0E5232A8276007879F4 /* Main.cpp */; };
 		193AD0F6232A83DF007879F4 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD0F5232A83DF007879F4 /* Shader.cpp */; };
 		193AD10B232A9227007879F4 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD10A232A9227007879F4 /* Mesh.cpp */; };
-		193AD10E232A94BC007879F4 /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD10D232A94BC007879F4 /* Triangle.cpp */; };
 		19624A5323463662006291CE /* Shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = 19624A5223463651006291CE /* Shaders */; };
 		197123C82347F9F3006A7739 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 197123C72347F9F3006A7739 /* Texture.cpp */; };
 		1980EDAB236B07CD003AF87E /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1980EDAA236B07CD003AF87E /* Player.cpp */; };
 		198CE12A232AFD6E009C2FBF /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 198CE128232AFD6E009C2FBF /* Camera.cpp */; };
-		19BF9A60232DE8FA00FF13A1 /* Axis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19BF9A5E232DE8FA00FF13A1 /* Axis.cpp */; };
-		19D8A23A2352E0F6005F224D /* Wheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19D8A2392352E0F6005F224D /* Wheel.cpp */; };
-		19F67BB223498A9100A02E77 /* Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19F67BB123498A9100A02E77 /* Quad.cpp */; };
 		19F67BCD2349A1DF00A02E77 /* Textures in CopyFiles */ = {isa = PBXBuildFile; fileRef = 19F67BCC2349A1D700A02E77 /* Textures */; };
 /* End PBXBuildFile section */
 
@@ -60,12 +63,26 @@
 		038B791D1A6FF3EB00111E36 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		03CF97D01B56DF9A00F60482 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = "../ThirdParty/FreeImage-3170/lib/osx/libfreeimage.a"; sourceTree = "<group>"; };
 		03DA72D122B02FC5009C7A21 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = "../ThirdParty/glew-2.1.0/lib/osx/libGLEW.a"; sourceTree = "<group>"; };
-		190B8FBC232C086D00F96298 /* Grid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
-		190B8FBD232C086D00F96298 /* Grid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
-		19240962232B292B0062AC03 /* Cube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
-		19240963232B292B0062AC03 /* Cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
-		19240965232B30540062AC03 /* Car.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
-		19240966232B30540062AC03 /* Car.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Car.cpp; sourceTree = "<group>"; };
+		1922752C238898C700A1335C /* Line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Line.cpp; sourceTree = "<group>"; };
+		1922752D238898C700A1335C /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rectangle.h; sourceTree = "<group>"; };
+		1922752E238898C700A1335C /* Rectangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rectangle.cpp; sourceTree = "<group>"; };
+		1922752F238898C700A1335C /* Line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Line.h; sourceTree = "<group>"; };
+		1922753323889AA800A1335C /* RectCollider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RectCollider.h; sourceTree = "<group>"; };
+		1922753423889AA800A1335C /* RectCollider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RectCollider.cpp; sourceTree = "<group>"; };
+		1922753723889B3800A1335C /* Axis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Axis.h; sourceTree = "<group>"; };
+		1922753823889B3800A1335C /* Axis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Axis.cpp; sourceTree = "<group>"; };
+		1922753923889B3800A1335C /* Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quad.h; sourceTree = "<group>"; };
+		1922753A23889B3800A1335C /* Quad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quad.cpp; sourceTree = "<group>"; };
+		1922753B23889B3800A1335C /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
+		1922753C23889B3800A1335C /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		1922753D23889B3800A1335C /* Wheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wheel.h; sourceTree = "<group>"; };
+		1922753E23889B3800A1335C /* Wheel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Wheel.cpp; sourceTree = "<group>"; };
+		1922753F23889B3800A1335C /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
+		1922754023889B3800A1335C /* Triangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle.cpp; sourceTree = "<group>"; };
+		1922754123889B3800A1335C /* Triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Triangle.h; sourceTree = "<group>"; };
+		1922754223889B3800A1335C /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
+		1922754A23889CD900A1335C /* Car.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Car.cpp; sourceTree = "<group>"; };
+		1922754B23889CD900A1335C /* Car.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
 		193AD0D7232A8276007879F4 /* Timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timing.h; sourceTree = "<group>"; };
 		193AD0D9232A8276007879F4 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
 		193AD0DC232A8276007879F4 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
@@ -81,8 +98,6 @@
 		193AD0F5232A83DF007879F4 /* Shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		193AD109232A9227007879F4 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		193AD10A232A9227007879F4 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
-		193AD10C232A94BC007879F4 /* Triangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Triangle.h; sourceTree = "<group>"; };
-		193AD10D232A94BC007879F4 /* Triangle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle.cpp; sourceTree = "<group>"; };
 		19624A5223463651006291CE /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 		197123C62347F9F3006A7739 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		197123C72347F9F3006A7739 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -90,13 +105,7 @@
 		1980EDAA236B07CD003AF87E /* Player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		198CE128232AFD6E009C2FBF /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		198CE129232AFD6E009C2FBF /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
-		19BF9A5E232DE8FA00FF13A1 /* Axis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Axis.cpp; sourceTree = "<group>"; };
-		19BF9A5F232DE8FA00FF13A1 /* Axis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Axis.h; sourceTree = "<group>"; };
-		19D8A2382352E0F6005F224D /* Wheel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wheel.h; sourceTree = "<group>"; };
-		19D8A2392352E0F6005F224D /* Wheel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wheel.cpp; sourceTree = "<group>"; };
 		19D8A23B2352E288005F224D /* OBJ_Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJ_Loader.h; sourceTree = "<group>"; };
-		19F67BB023498A9100A02E77 /* Quad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quad.h; sourceTree = "<group>"; };
-		19F67BB123498A9100A02E77 /* Quad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Quad.cpp; sourceTree = "<group>"; };
 		19F67BCC2349A1D700A02E77 /* Textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Textures; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,6 +160,36 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1922753623889B3800A1335C /* Primitives */ = {
+			isa = PBXGroup;
+			children = (
+				1922753823889B3800A1335C /* Axis.cpp */,
+				1922753723889B3800A1335C /* Axis.h */,
+				1922754223889B3800A1335C /* Cube.cpp */,
+				1922753C23889B3800A1335C /* Cube.h */,
+				1922753F23889B3800A1335C /* Grid.cpp */,
+				1922753B23889B3800A1335C /* Grid.h */,
+				1922753A23889B3800A1335C /* Quad.cpp */,
+				1922753923889B3800A1335C /* Quad.h */,
+				1922754023889B3800A1335C /* Triangle.cpp */,
+				1922754123889B3800A1335C /* Triangle.h */,
+				1922753E23889B3800A1335C /* Wheel.cpp */,
+				1922753D23889B3800A1335C /* Wheel.h */,
+			);
+			path = Primitives;
+			sourceTree = "<group>";
+		};
+		1922754923889B4700A1335C /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				1922754A23889CD900A1335C /* Car.cpp */,
+				1922754B23889CD900A1335C /* Car.h */,
+				1922753323889AA800A1335C /* RectCollider.h */,
+				1922753423889AA800A1335C /* RectCollider.cpp */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
 		193AD0D6232A8276007879F4 /* Src */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +198,8 @@
 				193AD0D7232A8276007879F4 /* Timing.h */,
 				1980EDA8236B07BA003AF87E /* Controllers */,
 				193AD0F3232A83CE007879F4 /* Graphics */,
+				1922754923889B4700A1335C /* Objects */,
+				1922753623889B3800A1335C /* Primitives */,
 				193AD0D8232A8276007879F4 /* Utils */,
 				193AD0DD232A8276007879F4 /* Math */,
 			);
@@ -179,10 +220,14 @@
 		193AD0DD232A8276007879F4 /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				1922752C238898C700A1335C /* Line.cpp */,
+				1922752F238898C700A1335C /* Line.h */,
 				193AD0DF232A8276007879F4 /* MathUtil.cpp */,
 				193AD0E2232A8276007879F4 /* MathUtil.h */,
 				193AD0E1232A8276007879F4 /* Matrix.cpp */,
 				193AD0DE232A8276007879F4 /* Matrix.h */,
+				1922752E238898C700A1335C /* Rectangle.cpp */,
+				1922752D238898C700A1335C /* Rectangle.h */,
 				193AD0E0232A8276007879F4 /* Vector.cpp */,
 				193AD0E3232A8276007879F4 /* Vector.h */,
 			);
@@ -202,28 +247,14 @@
 		193AD0F3232A83CE007879F4 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				19BF9A5E232DE8FA00FF13A1 /* Axis.cpp */,
-				19BF9A5F232DE8FA00FF13A1 /* Axis.h */,
 				198CE128232AFD6E009C2FBF /* Camera.cpp */,
 				198CE129232AFD6E009C2FBF /* Camera.h */,
-				19240966232B30540062AC03 /* Car.cpp */,
-				19240965232B30540062AC03 /* Car.h */,
-				19240963232B292B0062AC03 /* Cube.cpp */,
-				19240962232B292B0062AC03 /* Cube.h */,
-				190B8FBD232C086D00F96298 /* Grid.cpp */,
-				190B8FBC232C086D00F96298 /* Grid.h */,
 				193AD10A232A9227007879F4 /* Mesh.cpp */,
 				193AD109232A9227007879F4 /* Mesh.h */,
 				193AD0F5232A83DF007879F4 /* Shader.cpp */,
 				193AD0F4232A83DF007879F4 /* Shader.h */,
 				197123C72347F9F3006A7739 /* Texture.cpp */,
 				197123C62347F9F3006A7739 /* Texture.h */,
-				193AD10D232A94BC007879F4 /* Triangle.cpp */,
-				193AD10C232A94BC007879F4 /* Triangle.h */,
-				19F67BB123498A9100A02E77 /* Quad.cpp */,
-				19F67BB023498A9100A02E77 /* Quad.h */,
-				19D8A2392352E0F6005F224D /* Wheel.cpp */,
-				19D8A2382352E0F6005F224D /* Wheel.h */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -295,22 +326,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				197123C82347F9F3006A7739 /* Texture.cpp in Sources */,
+				19227531238898C700A1335C /* Rectangle.cpp in Sources */,
 				193AD0E8232A8276007879F4 /* MathUtil.cpp in Sources */,
+				1922754823889B3800A1335C /* Cube.cpp in Sources */,
+				1922754723889B3800A1335C /* Triangle.cpp in Sources */,
 				1980EDAB236B07CD003AF87E /* Player.cpp in Sources */,
 				193AD0EC232A8276007879F4 /* Main.cpp in Sources */,
 				198CE12A232AFD6E009C2FBF /* Camera.cpp in Sources */,
-				19F67BB223498A9100A02E77 /* Quad.cpp in Sources */,
+				1922754423889B3800A1335C /* Quad.cpp in Sources */,
 				193AD0E9232A8276007879F4 /* Vector.cpp in Sources */,
-				19240964232B292B0062AC03 /* Cube.cpp in Sources */,
 				193AD0E6232A8276007879F4 /* String.cpp in Sources */,
-				19240967232B30540062AC03 /* Car.cpp in Sources */,
+				1922754523889B3800A1335C /* Wheel.cpp in Sources */,
+				19227530238898C700A1335C /* Line.cpp in Sources */,
+				1922754623889B3800A1335C /* Grid.cpp in Sources */,
 				193AD0F6232A83DF007879F4 /* Shader.cpp in Sources */,
-				190B8FBE232C086D00F96298 /* Grid.cpp in Sources */,
-				19D8A23A2352E0F6005F224D /* Wheel.cpp in Sources */,
+				1922754C23889CD900A1335C /* Car.cpp in Sources */,
 				193AD0EA232A8276007879F4 /* Matrix.cpp in Sources */,
-				19BF9A60232DE8FA00FF13A1 /* Axis.cpp in Sources */,
 				193AD10B232A9227007879F4 /* Mesh.cpp in Sources */,
-				193AD10E232A94BC007879F4 /* Triangle.cpp in Sources */,
+				1922753523889AA800A1335C /* RectCollider.cpp in Sources */,
+				1922754323889B3800A1335C /* Axis.cpp in Sources */,
 				193AD0EB232A8276007879F4 /* Timing.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
