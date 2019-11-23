@@ -184,8 +184,8 @@
 			children = (
 				1922754A23889CD900A1335C /* Car.cpp */,
 				1922754B23889CD900A1335C /* Car.h */,
-				1922753323889AA800A1335C /* RectCollider.h */,
 				1922753423889AA800A1335C /* RectCollider.cpp */,
+				1922753323889AA800A1335C /* RectCollider.h */,
 			);
 			path = Objects;
 			sourceTree = "<group>";

@@ -50,7 +50,7 @@ void Player::update(float timestep, GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         input = input | Car::WalkInput::Right;
     }
-    car->walk(input, timestep * speed);
+    car->update(input, timestep * speed);
 
 	camera->update();
 }

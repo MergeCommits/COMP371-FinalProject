@@ -152,6 +152,10 @@ void Car::setRenderingMode(GLenum mode) {
     renderingMode = mode;
 }
 
+void Car::update(Car::WalkInput input, float speed) {
+    walk(input, speed);
+}
+
 void Car::walk(Car::WalkInput input, float speed) {
     if (input == WalkInput::None) { return; }
     
@@ -174,23 +178,23 @@ void Car::walk(Car::WalkInput input, float speed) {
         }
     }
     
-    float tireRot = 0.f;
-    float lazyReturnThreshold = 0.15f;
+    float deltaTireRotation = 0.f;
     if ((input & WalkInput::Left) != WalkInput::None) {
-        tireRot += speed;
+        deltaTireRotation += speed;
     }
     if ((input & WalkInput::Right) != WalkInput::None) {
-        tireRot -= speed;
+        deltaTireRotation -= speed;
     }
     
-    if (MathUtil::eqFloats(tireRot, 0.f)) {
+    float tireReturnToCenterSpeed = speed * 0.75f;
+    if (MathUtil::eqFloats(deltaTireRotation, 0.f)) {
         if (tireRotation > 0.f) {
-            tireRotation = MathUtil::clampFloat(tireRotation - lazyReturnThreshold, 0.f, tireRotation);
+            tireRotation = MathUtil::clampFloat(tireRotation - tireReturnToCenterSpeed, 0.f, tireRotation);
         } else if (tireRotation < 0.f) {
-            tireRotation = MathUtil::clampFloat(tireRotation + lazyReturnThreshold, tireRotation, 0.f);
+            tireRotation = MathUtil::clampFloat(tireRotation + tireReturnToCenterSpeed, tireRotation, 0.f);
         }
     } else {
-        tireRotation += tireRot;
+        tireRotation += deltaTireRotation;
     }
     
     tireRotation = MathUtil::clampFloat(tireRotation, -1.f, 1.f);
