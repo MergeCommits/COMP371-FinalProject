@@ -50,20 +50,12 @@ void Cube::setScale(float x, float y, float z) {
     scale = Vector3f(x, y, z);
 }
 
-void Cube::addScaleOrigin(float sca) {
-    scaleOrigin = scaleOrigin.add(Vector3f(sca, sca, sca));
-}
-
 void Cube::addRotationX(float bruh) {
     rotation.x += bruh;
 }
 
 void Cube::addRotationY(float bruh) {
     rotation.y += bruh;
-}
-
-void Cube::addRotationOriginY(float bruh) {
-    rotationOrigin.y += bruh;
 }
 
 void Cube::addRotationZ(float bruh) {
@@ -80,21 +72,19 @@ void Cube::constructWorldMat() {
     worldMatrix = Matrix4x4f::constructWorldMat(position, scale, rotation);
 }
 
-void Cube::constructWorldMat(const Vector3f& origin) {
-    Matrix4x4f scaleRelativeToOrigin = Matrix4x4f::scale(scaleOrigin, origin);
-    Matrix4x4f scaleRelativeToCube = Matrix4x4f::scale(scale);
-    Matrix4x4f rotateRelativeToOrigin = Matrix4x4f::rotate(rotationOrigin, origin);
-    Matrix4x4f rotateRelativeToCube = Matrix4x4f::rotate(rotation, Vector3f(0.f, 0.5f, 0.f));
+void Cube::constructWorldMat(const Vector3f& origin, const Matrix4x4f& originWorldMatrix) {
+    Matrix4x4f scaleMat = Matrix4x4f::scale(scale);
+    Matrix4x4f rotateMat = Matrix4x4f::rotate(rotation, Vector3f(0.f, 0.5f, 0.f));
     
-    worldMatrix = scaleRelativeToCube.product(rotateRelativeToCube.product(Matrix4x4f::translate(position).product(scaleRelativeToOrigin.product(rotateRelativeToOrigin))));
+    worldMatrix = scaleMat.product(Matrix4x4f::translate(position).product(rotateMat.product(originWorldMatrix)));
 }
 
 Matrix4x4f Cube::getWorldMatrix() const {
     return worldMatrix;
 }
 
-void Cube::update(const Vector3f& origin) {
-    constructWorldMat(origin);
+void Cube::update(const Vector3f& origin, const Matrix4x4f& originWorldMatrix) {
+    constructWorldMat(origin, originWorldMatrix);
 }
 
 void Cube::render() const {

@@ -60,16 +60,8 @@ void Wheel::addPositionXZ(const Vector2f& vect) {
     position.z += vect.y;
 }
 
-void Wheel::addScaleOrigin(float sca) {
-    scaleOrigin = scaleOrigin.add(Vector3f(sca, sca, sca));
-}
-
 void Wheel::addRotationX(float bruh) {
     rotation.x += bruh;
-}
-
-void Wheel::addRotationOriginY(float bruh) {
-    rotationOrigin.y += bruh;
 }
 
 void Wheel::addRotationZ(float bruh) {
@@ -82,35 +74,25 @@ void Wheel::setTireRotation(float bruh) {
 
 void Wheel::setShader(Shader* shd) {
     mesh->setShader(shd);
-    worldMat = shd->getMat4Uniform("modelMatrix");
+    worldMatrixUniform = shd->getMat4Uniform("modelMatrix");
     colorUniform = shd->getVec4fUniform("fsColor");
 }
 
-void Wheel::render() {
-    Matrix4x4f mat = Matrix4x4f::constructWorldMat(position, scale, rotation);
-    
-    worldMat->setValue(mat);
-    colorUniform->setValue(color);
-    glCullFace(GL_FRONT);
-    mesh->render();
-    glCullFace(GL_BACK);
-}
-
-void Wheel::render(const Vector3f& origin) {
-    Matrix4x4f scaleRelativeToOrigin = Matrix4x4f::scale(scaleOrigin, origin);
-    Matrix4x4f scaleRelativeToObject = Matrix4x4f::scale(scale);
-    Matrix4x4f rotateRelativeToOrigin = Matrix4x4f::rotate(rotationOrigin, origin);
+void Wheel::update(const Matrix4x4f& originWorldMatrix) {
+    Matrix4x4f scaleMat = Matrix4x4f::scale(scale);
     
     // Wheel center is 0,0,0. Push it up to 0,0.5,0 since that's where they should be rotated about.
     Vector3f localOrigin = Vector3f(0.f, 0.5f, 0.f);
-    Matrix4x4f rotateRelativeToObject = Matrix4x4f::rotate(Vector3f(rotation.x, rotation.y, rotation.z), localOrigin);
+    Matrix4x4f rotationMat = Matrix4x4f::rotate(Vector3f(rotation.x, rotation.y, rotation.z), localOrigin);
     // Do tire rotations after. Otherwise the rotations are out of order and the "moving" animation of the wheels is on the wrong axis.
     Matrix4x4f tireRotateMat = Matrix4x4f::rotate(Vector3f(0.f, tireRotation, 0.f), localOrigin);
-    rotateRelativeToObject = rotateRelativeToObject.product(tireRotateMat);
+    rotationMat = rotationMat.product(tireRotateMat);
     
-    Matrix4x4f mat = scaleRelativeToObject.product(rotateRelativeToObject.product(Matrix4x4f::translate(position).product(scaleRelativeToOrigin.product(rotateRelativeToOrigin))));
-    
-    worldMat->setValue(mat);
+    worldMatrix = scaleMat.product(rotationMat.product(Matrix4x4f::translate(position).product(originWorldMatrix)));
+}
+
+void Wheel::render() {
+    worldMatrixUniform->setValue(worldMatrix);
     colorUniform->setValue(color);
     glCullFace(GL_FRONT);
     mesh->render();

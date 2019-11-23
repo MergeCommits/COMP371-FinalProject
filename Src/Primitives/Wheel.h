@@ -18,7 +18,8 @@ private:
     float tireRotation;
 
     Mesh* mesh;
-    Shader::Uniform* worldMat;
+    Matrix4x4f worldMatrix;
+    Shader::Uniform* worldMatrixUniform;
     Shader::Uniform* colorUniform;
     
 public:
@@ -28,16 +29,14 @@ public:
 
     void setPosition(float x, float y, float z);
     void addPositionXZ(const Vector2f& vect);
-    void addScaleOrigin(float sca);
     void addRotationX(float bruh);
-    void addRotationOriginY(float bruh);
     void addRotationZ(float bruh);
     void setTireRotation(float bruh);
 
     void setShader(Shader* shd);
-
+    
+    void update(const Matrix4x4f& originWorldMatrix);
     void render();
-    void render(const Vector3f& origin);
 };
 
 #endif // WHEEL_H_INCLUDED

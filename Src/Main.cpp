@@ -131,7 +131,7 @@ int main() {
     player->getCamera()->addShader(shadowPassShader);
     
     Car* dummy = new Car(shadowPassShader);
-    dummy->addPositionXZ(Vector2f(0.f, -5.f));
+    dummy->addPositionXZ(Vector2f(10.f, -5.f));
 
     // Models.
 

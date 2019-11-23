@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "RectCollider.h"
 
 RectCollider::RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2f& bl, const Vector2f& br) {
@@ -24,7 +26,8 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     for (int i = 0; i < 4; i++) {
         Vector2f intersectPoint;
         if (line.intersects(colLines[i], intersectPoint)) {
-            intersectionDeepness = line.closestPoint(intersectPoint).distance(intersectPoint);
+            std::cout << "CONTACT POINT: (" << intersectPoint.x << ", " << intersectPoint.y << std::endl;
+            intersectionDeepness = colLines[i].closestPoint(intersectPoint).distance(intersectPoint);
             return true;
         }
     }
@@ -32,9 +35,9 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     return false;
 }
 
-bool RectCollider::collides(const RectCollider& other, CollisionDir& collisionSide, float& intersectionDeepness) const {
+bool RectCollider::collides(const RectCollider& other, CollisionDir& collisionSide) const {
     collisionSide = CollisionDir::None;
-    intersectionDeepness = 0.f;
+    float intersectionDeepness = 0.f;
     
     if (lineSegmentIntersectsCollider(top, other, intersectionDeepness)) {
         collisionSide = CollisionDir::Top;

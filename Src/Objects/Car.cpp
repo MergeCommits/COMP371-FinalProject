@@ -95,6 +95,7 @@ Car::Car(Shader* shd) {
     metalTexture = new Texture("Textures/metal.jpg");
     tireTexture = new Texture("Textures/tire.png");
     tireRotation = 0.f;
+    scale = Vector3f::one;
 }
 
 Car::~Car() {
@@ -129,12 +130,6 @@ void Car::addPositionXZ(const Vector2f& vect) {
 
 void Car::addScale(float sca) {
     scale = scale.add(Vector3f(sca, sca, sca));
-    for (int i = 0; i < (int)parts.size(); i++) {
-        parts[i]->addScaleOrigin(sca);
-    }
-    for (int i = 0; i < 4; i++) {
-        wheels[i]->addScaleOrigin(sca);
-    }
 }
 
 void Car::addRotationX(float bruh) {
@@ -149,12 +144,6 @@ void Car::addRotationX(float bruh) {
 
 void Car::addRotationY(float bruh) {
     rotation.y += bruh;
-    for (int i = 0; i < (int)parts.size(); i++) {
-        parts[i]->addRotationOriginY(bruh);
-    }
-    for (int i = 0; i < 4; i++) {
-        wheels[i]->addRotationOriginY(bruh);
-    }
 }
 
 void Car::addRotationZ(float bruh) {
@@ -172,24 +161,38 @@ void Car::setRenderingMode(GLenum mode) {
 }
 
 void Car::update(Car::WalkInput input, float speed) {
+    walk(input, speed);
+    
+    // Collision.
+    collider.update(body->getWorldMatrix());
+    
+    bool coll = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
         if (allCars[i] == this) { continue; }
         
         RectCollider::CollisionDir dir;
-        float intersectionLength;
-        if (collider.collides(allCars[i]->collider, dir, intersectionLength)) {
-            std::cout << "COLLIDE:" << std::endl;
-        } else {
-            std::cout << "NO COLLIDE:" << std::endl;
+        if (collider.collides(allCars[i]->collider, dir)) {
+            coll = true;
+            break;
         }
     }
     
-    walk(input, speed);
-    
-    for (int i = 0; i < (int)parts.size(); i++) {
-        parts[i]->update(position);
+    if (!coll) {
+        addPositionXZ(deltaPositionXZ);
+        deltaPositionXZ = Vector2f::zero;
+        
+        Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
+        Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
+        
+        Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
+        
+        for (int i = 0; i < (int)parts.size(); i++) {
+            parts[i]->update(position, worldMatrix);
+        }
+        for (int i = 0; i < 4; i++) {
+            wheels[i]->update(worldMatrix);
+        }
     }
-    collider.update(body->getWorldMatrix());
 }
 
 void Car::walk(Car::WalkInput input, float speed) {
@@ -245,7 +248,8 @@ void Car::walk(Car::WalkInput input, float speed) {
     } else if ((input & WalkInput::Backward) != WalkInput::None) {
         addRotationY(tireRotation * -0.05f);
     }
-    addPositionXZ(targetDir.normalize().multiply(speed));
+    
+    deltaPositionXZ = targetDir.normalize().multiply(speed);
 }
 
 void Car::setShader(Shader* shd) {
@@ -265,7 +269,7 @@ void Car::render() {
     }
     tireTexture->activate(1);
     for (int i = 0; i < 4; i++) {
-        wheels[i]->render(position);
+        wheels[i]->render();
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

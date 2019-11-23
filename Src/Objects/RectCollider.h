@@ -34,7 +34,7 @@ public:
     RectCollider()=default;
     RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2f& bl, const Vector2f& br);
     
-    bool collides(const RectCollider& other, CollisionDir& collisionSide, float& intersectionDeepness) const;
+    bool collides(const RectCollider& other, CollisionDir& collisionSide) const;
     
     void update(const Matrix4x4f& worldMatrix);
 };

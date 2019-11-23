@@ -26,6 +26,7 @@ private:
     static std::vector<const Car*> allCars;
     
     Vector3f position;
+    Vector2f deltaPositionXZ;
     Vector3f scale;
     Vector3f rotation;
     float tireRotation;

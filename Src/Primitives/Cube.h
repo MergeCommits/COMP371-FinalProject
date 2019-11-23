@@ -74,19 +74,17 @@ public:
     void setPosition(float x, float y, float z);
     void addPositionXZ(const Vector2f& vect);
     void setScale(float x, float y, float z);
-    void addScaleOrigin(float sca);
     void addRotationX(float bruh);
     void addRotationY(float bruh);
-    void addRotationOriginY(float bruh);
     void addRotationZ(float bruh);
 
     void setShader(Shader* shd);
     
     void constructWorldMat();
-    void constructWorldMat(const Vector3f& origin);
+    void constructWorldMat(const Vector3f& origin, const Matrix4x4f& originWorldMatrix);
     Matrix4x4f getWorldMatrix() const;
 
-    void update(const Vector3f& origin);
+    void update(const Vector3f& origin, const Matrix4x4f& originWorldMatrix);
     void render() const;
 };
 
