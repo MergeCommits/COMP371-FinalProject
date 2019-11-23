@@ -30,6 +30,7 @@ private:
     Vector3f scale;
     Vector2f colliderScale;
     Vector3f rotation;
+    float deltaRotationY;
     float tireRotation;
     GLenum renderingMode;
     

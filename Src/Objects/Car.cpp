@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 
 #include "Car.h"
 #include "Cube.h"
@@ -166,7 +165,9 @@ void Car::update(Car::WalkInput input, float speed) {
     walk(input, speed);
     
     // Collision.
-    collider.update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
+    Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
+    Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
+    collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
     
     bool coll = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
@@ -175,16 +176,13 @@ void Car::update(Car::WalkInput input, float speed) {
         RectCollider::CollisionDir dir;
         if (collider.collides(allCars[i]->collider, dir)) {
             coll = true;
-            std::cout << "COLL:" << std::endl;
             break;
-        } else {
-            std::cout << "NOCOLL:" << std::endl;
         }
     }
     
-//    if (!coll) {
+    if (!coll) {
         addPositionXZ(deltaPositionXZ);
-        deltaPositionXZ = Vector2f::zero;
+        addRotationY(deltaRotationY);
         
         Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
         Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
@@ -197,7 +195,9 @@ void Car::update(Car::WalkInput input, float speed) {
         for (int i = 0; i < 4; i++) {
             wheels[i]->update(worldMatrix);
         }
-//    }
+    }
+    deltaPositionXZ = Vector2f::zero;
+    deltaRotationY = 0.f;
 }
 
 void Car::walk(Car::WalkInput input, float speed) {
@@ -249,9 +249,9 @@ void Car::walk(Car::WalkInput input, float speed) {
     if (targetDir.lengthSquared() < 0.01f) { return; }
     
     if ((input & WalkInput::Forward) != WalkInput::None) {
-        addRotationY(tireRotation * 0.05f);
+        deltaRotationY = tireRotation * 0.05f;
     } else if ((input & WalkInput::Backward) != WalkInput::None) {
-        addRotationY(tireRotation * -0.05f);
+        deltaRotationY = tireRotation * -0.05f;
     }
     
     deltaPositionXZ = targetDir.normalize().multiply(speed);
