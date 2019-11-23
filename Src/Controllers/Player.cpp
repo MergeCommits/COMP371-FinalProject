@@ -10,6 +10,7 @@
 Player::Player(Shader* shd, int camWidth, int camHeight) {
     car = new Car(shd);
     camera = new Camera(camWidth, camHeight);
+    camera->addAngle(-3.14 / 2.f, 0.f);
 
 	cameraFollowingCar = true;
 }

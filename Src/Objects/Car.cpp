@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 
 #include "Car.h"
 #include "Cube.h"
@@ -7,13 +8,24 @@
 #include "Texture.h"
 #include "../Math/MathUtil.h"
 
+std::vector<const Car*> Car::allCars;
+
 Car::Car(Shader* shd) {
-    renderingMode = GL_FILL;
+    allCars.push_back(this);
     
-    Cube* bottom = new Cube(shd);
-    bottom->setScale(4.f, 0.5f, 6.f);
-    bottom->setPosition(0.f, 0.5f, 0.f);
-    bottom->color = Vector4f(0.25f, 0.25f, 0.25f, 1.f);
+    renderingMode = GL_FILL;
+
+    collider = RectCollider(
+                            Vector2f(-0.5f, 0.5f),
+                            Vector2f(0.5f, 0.5f),
+                            Vector2f(-0.5f, -0.5f),
+                            Vector2f(0.5f, -0.5f)
+                            );
+    
+    body = new Cube(shd);
+    body->setScale(4.f, 0.5f, 6.f);
+    body->setPosition(0.f, 0.5f, 0.f);
+    body->color = Vector4f(0.25f, 0.25f, 0.25f, 1.f);
     Cube* roof = new Cube(shd);
     roof->setScale(4.f, 0.5f, 6.f);
     roof->setPosition(0.f, 4.25f, 0.f);
@@ -67,7 +79,7 @@ Car::Car(Shader* shd) {
         wheels[i]->color = Vector4f(0.2f, 0.2f, 0.2f, 1.f);
     }
 
-    parts.push_back(bottom);
+    parts.push_back(body);
     parts.push_back(roof);
     parts.push_back(front);
     parts.push_back(back);
@@ -95,6 +107,13 @@ Car::~Car() {
     }
     delete metalTexture;
     delete tireTexture;
+    
+    for (int i = 0; i < (int)allCars.size(); i++) {
+        if (allCars[i] == this) {
+            allCars.erase(allCars.begin() + i);
+            break;
+        }
+    }
 }
 
 void Car::addPositionXZ(const Vector2f& vect) {
@@ -153,7 +172,24 @@ void Car::setRenderingMode(GLenum mode) {
 }
 
 void Car::update(Car::WalkInput input, float speed) {
+    for (int i = 0; i < (int)allCars.size(); i++) {
+        if (allCars[i] == this) { continue; }
+        
+        RectCollider::CollisionDir dir;
+        float intersectionLength;
+        if (collider.collides(allCars[i]->collider, dir, intersectionLength)) {
+            std::cout << "COLLIDE:" << std::endl;
+        } else {
+            std::cout << "NO COLLIDE:" << std::endl;
+        }
+    }
+    
     walk(input, speed);
+    
+    for (int i = 0; i < (int)parts.size(); i++) {
+        parts[i]->update(position);
+    }
+    collider.update(body->getWorldMatrix());
 }
 
 void Car::walk(Car::WalkInput input, float speed) {
@@ -225,7 +261,7 @@ void Car::render() {
     glPolygonMode(GL_FRONT_AND_BACK, renderingMode);
     metalTexture->activate(1);
     for (int i = 0; i < (int)parts.size(); i++) {
-        parts[i]->render(position);
+        parts[i]->render();
     }
     tireTexture->activate(1);
     for (int i = 0; i < 4; i++) {

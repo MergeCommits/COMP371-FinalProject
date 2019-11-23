@@ -9,6 +9,7 @@
 
 #include "Timing.h"
 #include "Controllers/Player.h"
+#include "Objects/Car.h"
 #include "Primitives/Grid.h"
 #include "Primitives/Quad.h"
 #include "Primitives/Axis.h"
@@ -29,10 +30,10 @@ float mouseXDiff = 0.f;
 float mouseYDiff = 0.f;
 
 // Whether to perform a depth pass for shadow mapping.
-bool enableShadows = true;
+bool enableShadows = false;
 
 // Whether to use texture colors or vertex colors.
-bool enableTextures = true;
+bool enableTextures = false;
 
 // Whether to render the depth map to a texture for debugging.
 bool debugDepthMap = false;
@@ -125,9 +126,12 @@ int main() {
     
     // Players.
     Player* player = new Player(defaultShader, width, height);
-    player->getCamera()->setPosition(Vector3f(0.f, 5.f, -20.f));
+    player->getCamera()->setPosition(Vector3f(0.f, 5.f, -10.f));
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(shadowPassShader);
+    
+    Car* dummy = new Car(shadowPassShader);
+    dummy->addPositionXZ(Vector2f(0.f, -5.f));
 
     // Models.
 
@@ -190,6 +194,7 @@ int main() {
             
             updateInputs(timestep, window, player->getCamera());
             player->update(timestep, window);
+            dummy->update(Car::WalkInput::None, 0.f);
 
 			light->update();
             
@@ -245,6 +250,8 @@ int main() {
             grid->render();
             player->setCarShader(shadowPassShader);
             player->render();
+            
+            dummy->render();
 
             glDisable(GL_DEPTH_TEST);
             xAxis->render();
@@ -270,6 +277,7 @@ int main() {
 
     delete light;
     delete player;
+    delete dummy;
     delete grid;
     delete xAxis;
     delete yAxis;

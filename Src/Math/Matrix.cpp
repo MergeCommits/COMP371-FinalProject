@@ -46,10 +46,10 @@ Matrix4x4f Matrix4x4f::product(const Matrix4x4f& other) const {
 
 Vector4f Matrix4x4f::transform(const Vector4f& other) const {
     Vector4f retVal = Vector4f::zero;
-    retVal.x = other.x*elements[0][0]+other.y*elements[0][1]+other.z*elements[0][2]+other.w*elements[0][3];
-    retVal.y = other.x*elements[1][0]+other.y*elements[1][1]+other.z*elements[1][2]+other.w*elements[1][3];
-    retVal.z = other.x*elements[2][0]+other.y*elements[2][1]+other.z*elements[2][2]+other.w*elements[2][3];
-    retVal.w = other.x*elements[3][0]+other.y*elements[3][1]+other.z*elements[3][2]+other.w*elements[3][3];
+    retVal.x = other.x*elements[0][0]+other.y*elements[1][0]+other.z*elements[2][0]+other.w*elements[3][0];
+    retVal.y = other.x*elements[0][1]+other.y*elements[1][1]+other.z*elements[2][1]+other.w*elements[3][1];
+    retVal.z = other.x*elements[0][2]+other.y*elements[1][2]+other.z*elements[2][2]+other.w*elements[3][2];
+    retVal.w = other.x*elements[0][3]+other.y*elements[1][3]+other.z*elements[2][3]+other.w*elements[3][3];
     return retVal;
 }
 

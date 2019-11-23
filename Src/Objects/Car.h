@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 #include "../Math/Vector.h"
+#include "RectCollider.h"
 
 class Cube;
 class Wheel;
@@ -22,6 +23,8 @@ public:
     };
     
 private:
+    static std::vector<const Car*> allCars;
+    
     Vector3f position;
     Vector3f scale;
     Vector3f rotation;
@@ -31,8 +34,10 @@ private:
     Texture* metalTexture;
     Texture* tireTexture;
     
+    Cube* body;
     std::vector<Cube*> parts;
     Wheel* wheels[4];
+    RectCollider collider;
     
     void walk(WalkInput input, float speed);
     
@@ -40,7 +45,6 @@ public:
     Car(Shader* shd);
     ~Car();
     
-    void update(WalkInput input, float speed);
     void addPositionXZ(const Vector2f& vect);
     void addScale(float sca);
     void addRotationX(float bruh);
@@ -50,6 +54,7 @@ public:
     
     void setShader(Shader* shd);
     
+    void update(WalkInput input, float speed);
     void render();
 };
 

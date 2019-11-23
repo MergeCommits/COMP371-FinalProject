@@ -3,6 +3,7 @@
 
 #include "../Math/Vector.h"
 #include "../Math/Matrix.h"
+#include "../Math/Line.h"
 
 class RectCollider {
 private:
@@ -11,7 +12,15 @@ private:
     Vector2f bottomLeft;
     Vector2f bottomRight;
     
+    Line2f top;
+    Line2f right;
+    Line2f bottom;
+    Line2f left;
+    
     Matrix4x4f worldMat;
+    
+    static Vector2f transformXZCoordinates(const Vector2f& xzCoordinates, const Matrix4x4f& worldMatrix);
+    static bool lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other, float& intersectionDeepness);
     
 public:
     enum class CollisionDir {
@@ -22,7 +31,12 @@ public:
         Left = 0x8
     };
     
-    bool collides(const Matrix4x4f& worldMatrix, float& intersectionDeepness) const;
+    RectCollider()=default;
+    RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2f& bl, const Vector2f& br);
+    
+    bool collides(const RectCollider& other, CollisionDir& collisionSide, float& intersectionDeepness) const;
+    
+    void update(const Matrix4x4f& worldMatrix);
 };
 
 #endif // RECTCOLLIDER_H_INCLUDED

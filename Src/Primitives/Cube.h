@@ -86,8 +86,8 @@ public:
     void constructWorldMat(const Vector3f& origin);
     Matrix4x4f getWorldMatrix() const;
 
-    void render();
-    void render(const Vector3f& origin);
+    void update(const Vector3f& origin);
+    void render() const;
 };
 
 #endif // CUBE_H_INCLUDED

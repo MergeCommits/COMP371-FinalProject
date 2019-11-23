@@ -93,22 +93,15 @@ Matrix4x4f Cube::getWorldMatrix() const {
     return worldMatrix;
 }
 
-void Cube::render() {
-    constructWorldMat();
-    worldMatUniform->setValue(worldMatrix);
-    colorUniform->setValue(color);
-    glCullFace(GL_FRONT);
-    mesh->render();
-    glCullFace(GL_BACK);
-    
+void Cube::update(const Vector3f& origin) {
+    constructWorldMat(origin);
 }
 
-void Cube::render(const Vector3f& origin) {
-    constructWorldMat(origin);
-    
+void Cube::render() const {
     worldMatUniform->setValue(worldMatrix);
     colorUniform->setValue(color);
     glCullFace(GL_FRONT);
     mesh->render();
     glCullFace(GL_BACK);
+    
 }
