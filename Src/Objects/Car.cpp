@@ -22,10 +22,12 @@ Car::Car(Shader* shd) {
                             Vector2f(0.5f, -0.5f)
                             );
     
-    body = new Cube(shd);
-    body->setScale(4.f, 0.5f, 6.f);
-    body->setPosition(0.f, 0.5f, 0.f);
-    body->color = Vector4f(0.25f, 0.25f, 0.25f, 1.f);
+    colliderScale = Vector2f(4.f, 6.f);
+    
+    Cube* bottom = new Cube(shd);
+    bottom->setScale(4.f, 0.5f, 6.f);
+    bottom->setPosition(0.f, 0.5f, 0.f);
+    bottom->color = Vector4f(0.25f, 0.25f, 0.25f, 1.f);
     Cube* roof = new Cube(shd);
     roof->setScale(4.f, 0.5f, 6.f);
     roof->setPosition(0.f, 4.25f, 0.f);
@@ -79,7 +81,7 @@ Car::Car(Shader* shd) {
         wheels[i]->color = Vector4f(0.2f, 0.2f, 0.2f, 1.f);
     }
 
-    parts.push_back(body);
+    parts.push_back(bottom);
     parts.push_back(roof);
     parts.push_back(front);
     parts.push_back(back);
@@ -164,7 +166,7 @@ void Car::update(Car::WalkInput input, float speed) {
     walk(input, speed);
     
     // Collision.
-    collider.update(body->getWorldMatrix());
+    collider.update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
     
     bool coll = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
@@ -173,11 +175,14 @@ void Car::update(Car::WalkInput input, float speed) {
         RectCollider::CollisionDir dir;
         if (collider.collides(allCars[i]->collider, dir)) {
             coll = true;
+            std::cout << "COLL:" << std::endl;
             break;
+        } else {
+            std::cout << "NOCOLL:" << std::endl;
         }
     }
     
-    if (!coll) {
+//    if (!coll) {
         addPositionXZ(deltaPositionXZ);
         deltaPositionXZ = Vector2f::zero;
         
@@ -192,7 +197,7 @@ void Car::update(Car::WalkInput input, float speed) {
         for (int i = 0; i < 4; i++) {
             wheels[i]->update(worldMatrix);
         }
-    }
+//    }
 }
 
 void Car::walk(Car::WalkInput input, float speed) {

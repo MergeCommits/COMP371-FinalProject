@@ -28,6 +28,7 @@ private:
     Vector3f position;
     Vector2f deltaPositionXZ;
     Vector3f scale;
+    Vector2f colliderScale;
     Vector3f rotation;
     float tireRotation;
     GLenum renderingMode;
@@ -35,7 +36,6 @@ private:
     Texture* metalTexture;
     Texture* tireTexture;
     
-    Cube* body;
     std::vector<Cube*> parts;
     Wheel* wheels[4];
     RectCollider collider;
