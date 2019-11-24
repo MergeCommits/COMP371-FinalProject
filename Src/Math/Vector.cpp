@@ -53,6 +53,10 @@ Vector2f Vector2f::normalize() const {
     return multiply(1.f/length());
 }
 
+Vector2f Vector2f::negate() const {
+    return Vector2f(-x, -y);
+}
+
 Vector2f Vector2f::reflect(const Vector2f& n) const {
     Vector2f reflectedVector = normalize();
     reflectedVector = n.multiply(2.f*reflectedVector.dotProduct(n)).subtract(reflectedVector);

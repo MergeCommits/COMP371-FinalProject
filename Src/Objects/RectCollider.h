@@ -20,7 +20,7 @@ private:
     Matrix4x4f worldMat;
     
     static Vector2f transformXZCoordinates(const Vector2f& xzCoordinates, const Matrix4x4f& worldMatrix);
-    static bool lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other, float& intersectionDeepness);
+    static bool lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other);
     
 public:
     enum class CollisionDir {

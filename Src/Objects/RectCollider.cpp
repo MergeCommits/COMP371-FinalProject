@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "RectCollider.h"
 
 RectCollider::RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2f& bl, const Vector2f& br) {
@@ -16,7 +14,7 @@ Vector2f RectCollider::transformXZCoordinates(const Vector2f& xzCoordinates, con
     return Vector2f(transform.x, transform.z);
 }
 
-bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other, float& intersectionDeepness) {
+bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other) {
     Line2f colLines[4];
     colLines[0] = other.top;
     colLines[1] = other.right;
@@ -26,8 +24,6 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     for (int i = 0; i < 4; i++) {
         Vector2f intersectPoint;
         if (line.intersects(colLines[i], intersectPoint)) {
-//            std::cout << "CONTACT POINT: (" << intersectPoint.x << ", " << intersectPoint.y << std::endl;
-            intersectionDeepness = colLines[i].closestPoint(intersectPoint).distance(intersectPoint);
             return true;
         }
     }
@@ -37,24 +33,23 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
 
 bool RectCollider::collides(const RectCollider& other, CollisionDir& collisionSide) const {
     collisionSide = CollisionDir::None;
-    float intersectionDeepness = 0.f;
     
-    if (lineSegmentIntersectsCollider(top, other, intersectionDeepness)) {
+    if (lineSegmentIntersectsCollider(top, other)) {
         collisionSide = CollisionDir::Top;
         return true;
     }
     
-    if (lineSegmentIntersectsCollider(right, other, intersectionDeepness)) {
+    if (lineSegmentIntersectsCollider(right, other)) {
         collisionSide = CollisionDir::Right;
         return true;
     }
     
-    if (lineSegmentIntersectsCollider(bottom, other, intersectionDeepness)) {
+    if (lineSegmentIntersectsCollider(bottom, other)) {
         collisionSide = CollisionDir::Bottom;
         return true;
     }
     
-    if (lineSegmentIntersectsCollider(left, other, intersectionDeepness)) {
+    if (lineSegmentIntersectsCollider(left, other)) {
         collisionSide = CollisionDir::Left;
         return true;
     }

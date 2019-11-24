@@ -22,7 +22,7 @@ Car::Car(Shader* shd) {
                             Vector2f(0.5f, -0.5f)
                             );
     
-    colliderScale = Vector2f(4.f, 8.4f);
+    colliderScale = Vector2f(8.f, 8.4f);
     
     Cube* bottom = new Cube(shd);
     bottom->setScale(4.f, 0.5f, 6.f);
@@ -174,25 +174,17 @@ void Car::update(Car::WalkInput input, float timestep) {
     updateVelocity(timestep);
     deltaPositionXZ = velocity;
     
-    if (!deltaPositionCausesCollision()) {
-        addPositionXZ(deltaPositionXZ);
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->addRotationZ(-deltaPositionXZ.length());
-        }
-        addRotationY(deltaRotationY);
-        
-        Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
-        Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
-        
-        Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
-        
-        for (int i = 0; i < (int)parts.size(); i++) {
-            parts[i]->update(position, worldMatrix);
-        }
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->update(worldMatrix);
-        }
+    Car* collidedCar = nullptr;
+    if (deltaPositionCausesCollision(collidedCar)) {
+        std::cout << "COLLIDE: " << std::endl;
+//        velocity = velocity.negate().multiply(10.f);
+//        deltaPositionXZ = Vector2f::zero;
+//        deltaRotationY = 0.f;
+    } else {
+        std::cout << "NOCOLLIDE: " << std::endl;
     }
+    
+    updatePosition();
     
     deltaPositionXZ = Vector2f::zero;
     deltaRotationY = 0.f;
@@ -247,9 +239,26 @@ void Car::updateVelocity(float timestep) {
     
     if (velocity.y > TERMINAL_VELOCITY) { velocity.y = TERMINAL_VELOCITY; }
     else if (velocity.y < -TERMINAL_VELOCITY) { velocity.y = -TERMINAL_VELOCITY; }
+}
+
+void Car::updatePosition() {
+    addPositionXZ(deltaPositionXZ);
+    for (int i = 0; i < 4; i++) {
+        wheels[i]->addRotationZ(-deltaPositionXZ.length());
+    }
+    addRotationY(deltaRotationY);
     
+    Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
+    Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
     
-    std::cout << "VELOCITY: " << velocity.x << ", " << velocity.y << std::endl;
+    Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
+    
+    for (int i = 0; i < (int)parts.size(); i++) {
+        parts[i]->update(position, worldMatrix);
+    }
+    for (int i = 0; i < 4; i++) {
+        wheels[i]->update(worldMatrix);
+    }
 }
 
 void Car::updateTireRotation(WalkInput input, float speed) {
@@ -278,7 +287,7 @@ void Car::updateTireRotation(WalkInput input, float speed) {
     }
 }
 
-bool Car::deltaPositionCausesCollision() {
+bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
     Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
     collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
@@ -288,6 +297,7 @@ bool Car::deltaPositionCausesCollision() {
         
         RectCollider::CollisionDir dir;
         if (collider.collides(allCars[i]->collider, dir)) {
+            collidedCar = allCars[i];
             return true;
         }
     }

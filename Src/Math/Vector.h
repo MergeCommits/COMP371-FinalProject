@@ -25,6 +25,7 @@ public:
     Vector2f multiply(float s) const;
     Vector2f normalize() const;
 
+    Vector2f negate() const;
     Vector2f reflect(const Vector2f& n) const;
     float dotProduct(const Vector2f& b) const;
 
