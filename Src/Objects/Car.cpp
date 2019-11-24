@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 
 #include "Car.h"
 #include "Cube.h"
@@ -22,7 +21,7 @@ Car::Car(Shader* shd) {
                             Vector2f(0.5f, -0.5f)
                             );
     
-    colliderScale = Vector2f(8.f, 8.4f);
+    colliderScale = Vector2f(4.f, 6.f);
     
     Cube* bottom = new Cube(shd);
     bottom->setScale(4.f, 0.5f, 6.f);
@@ -30,43 +29,43 @@ Car::Car(Shader* shd) {
     bottom->color = Vector4f(0.25f, 0.25f, 0.25f, 1.f);
     Cube* roof = new Cube(shd);
     roof->setScale(4.f, 0.5f, 6.f);
-    roof->setPosition(0.f, 4.25f, 0.f);
+    roof->setPosition(0.f, 3.5f, 0.f);
     roof->color = Vector4f(0.25f, 0.25f, 1.f, 1.f);
 
-    Cube* front = new Cube(shd);
-    front->setScale(3.f, 1.25f, 1.5f);
-    front->setPosition(0.f, 1.f, 3.75f);
-    Cube* back = new Cube(shd);
-    back->setScale(3.f, 1.25f, 1.5f);
-    back->setPosition(0.f, 1.f, -3.375f);
+//    Cube* front = new Cube(shd);
+//    front->setScale(3.f, 1.25f, 1.5f);
+//    front->setPosition(0.f, 1.f, 3.75f);
+//    Cube* back = new Cube(shd);
+//    back->setScale(3.f, 1.25f, 1.5f);
+//    back->setPosition(0.f, 1.f, -3.375f);
 
     // Sides of the car.
     Cube* leftWall = new Cube(shd);
-    leftWall->setScale(0.5f, 1.25f, 6.f);
+    leftWall->setScale(0.5f, 1.f, 6.f);
     leftWall->setPosition(-1.75f, 1.f, 0.f);
     Cube* rightWall = new Cube(shd);
-    rightWall->setScale(0.5f, 1.25f, 6.f);
+    rightWall->setScale(0.5f, 1.f, 6.f);
     rightWall->setPosition(1.75f, 1.f, 0.f);
     Cube* frontWall = new Cube(shd);
-    frontWall->setScale(3.f, 1.25f, 0.5f);
+    frontWall->setScale(3.f, 1.f, 0.5f);
     frontWall->setPosition(0.f, 1.f, 2.75f);
     Cube* backWall = new Cube(shd);
-    backWall->setScale(3.f, 1.25f, 0.5f);
+    backWall->setScale(3.f, 1.f, 0.5f);
     backWall->setPosition(0.f, 1.f, -2.75f);
 
     // Supports for the roof.
     Cube* topLeftPillar = new Cube(shd);
-    topLeftPillar->setScale(0.5f, 2.f, 0.5f);
-    topLeftPillar->setPosition(-1.75f, 2.25f, 2.75f);
+    topLeftPillar->setScale(0.5f, 1.5f, 0.5f);
+    topLeftPillar->setPosition(-1.75f, 2.f, 2.75f);
     Cube* topRightPillar = new Cube(shd);
-    topRightPillar->setScale(0.5f, 2.f, 0.5f);
-    topRightPillar->setPosition(1.75f, 2.25f, 2.75f);
+    topRightPillar->setScale(0.5f, 1.5f, 0.5f);
+    topRightPillar->setPosition(1.75f, 2.f, 2.75f);
     Cube* botLeftPillar = new Cube(shd);
-    botLeftPillar->setScale(0.5f, 2.f, 0.5f);
-    botLeftPillar->setPosition(-1.75f, 2.25f, -2.75f);
+    botLeftPillar->setScale(0.5f, 1.5f, 0.5f);
+    botLeftPillar->setPosition(-1.75f, 2.f, -2.75f);
     Cube* botRightPillar = new Cube(shd);
-    botRightPillar->setScale(0.5f, 2.f, 0.5f);
-    botRightPillar->setPosition(1.75f, 2.25f, -2.75f);
+    botRightPillar->setScale(0.5f, 1.5f, 0.5f);
+    botRightPillar->setPosition(1.75f, 2.f, -2.75f);
     
     wheels[0] = new Wheel(shd);
     wheels[0]->setPosition(2.f, 0.f, 2.5f);
@@ -83,8 +82,8 @@ Car::Car(Shader* shd) {
 
     parts.push_back(bottom);
     parts.push_back(roof);
-    parts.push_back(front);
-    parts.push_back(back);
+//    parts.push_back(front);
+//    parts.push_back(back);
     parts.push_back(leftWall);
     parts.push_back(rightWall);
     parts.push_back(frontWall);
@@ -176,12 +175,9 @@ void Car::update(Car::WalkInput input, float timestep) {
     
     Car* collidedCar = nullptr;
     if (deltaPositionCausesCollision(collidedCar)) {
-        std::cout << "COLLIDE: " << std::endl;
-//        velocity = velocity.negate().multiply(10.f);
-//        deltaPositionXZ = Vector2f::zero;
-//        deltaRotationY = 0.f;
-    } else {
-        std::cout << "NOCOLLIDE: " << std::endl;
+        velocity = velocity.negate().multiply(10.f);
+        deltaPositionXZ = Vector2f::zero;
+        deltaRotationY = 0.f;
     }
     
     updatePosition();
