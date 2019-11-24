@@ -164,12 +164,64 @@ void Car::setRenderingMode(GLenum mode) {
 }
 
 void Car::update(Car::WalkInput input, float timestep) {
-    float speed = DEFAULT_ACCELERATION * timestep;
     acceleration = Vector2f::zero;
     
-    // Movement.
-    walk(input, speed);
+    if (input != WalkInput::None) {
+        updateTireRotation(input, TURN_SPEED * timestep);
+        updateAcceleration(input, INPUT_ACCELERATION * timestep);
+    }
     
+    updateVelocity(timestep);
+    deltaPositionXZ = velocity;
+    
+    if (!deltaPositionCausesCollision()) {
+        addPositionXZ(deltaPositionXZ);
+        for (int i = 0; i < 4; i++) {
+            wheels[i]->addRotationZ(-deltaPositionXZ.length());
+        }
+        addRotationY(deltaRotationY);
+        
+        Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
+        Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
+        
+        Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
+        
+        for (int i = 0; i < (int)parts.size(); i++) {
+            parts[i]->update(position, worldMatrix);
+        }
+        for (int i = 0; i < 4; i++) {
+            wheels[i]->update(worldMatrix);
+        }
+    }
+    
+    deltaPositionXZ = Vector2f::zero;
+    deltaRotationY = 0.f;
+}
+
+void Car::updateAcceleration(Car::WalkInput input, float speed) {
+    float sinAngle = std::sin(rotation.y);
+    float cosAngle = std::cos(rotation.y);
+    
+    Vector2f targetDir = Vector2f::zero;
+    if ((input & WalkInput::Forward) != WalkInput::None) {
+        targetDir = targetDir.add(Vector2f(sinAngle,cosAngle));
+    }
+    if ((input & WalkInput::Backward) != WalkInput::None) {
+        targetDir = targetDir.add(Vector2f(-sinAngle,-cosAngle));
+    }
+    
+    if (targetDir.lengthSquared() < 0.01f) { return; }
+    
+    if ((input & WalkInput::Forward) != WalkInput::None) {
+        deltaRotationY = tireRotation * 0.05f;
+    } else if ((input & WalkInput::Backward) != WalkInput::None) {
+        deltaRotationY = tireRotation * -0.05f;
+    }
+    
+    acceleration = targetDir.normalize().multiply(speed);
+}
+
+void Car::updateVelocity(float timestep) {
     // Apply acceleration and friction to velocity.
     velocity = velocity.add(acceleration);
     
@@ -198,60 +250,9 @@ void Car::update(Car::WalkInput input, float timestep) {
     
     
     std::cout << "VELOCITY: " << velocity.x << ", " << velocity.y << std::endl;
-    deltaPositionXZ = velocity;
-    
-    // Collision.
-    Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
-    Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
-    collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
-    
-    bool coll = false;
-    for (int i = 0; i < (int)allCars.size(); i++) {
-        if (allCars[i] == this) { continue; }
-        
-        RectCollider::CollisionDir dir;
-        if (collider.collides(allCars[i]->collider, dir)) {
-            coll = true;
-            break;
-        }
-    }
-    
-    if (!coll) {
-        addPositionXZ(deltaPositionXZ);
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->addRotationZ(-deltaPositionXZ.length());
-        }
-        addRotationY(deltaRotationY);
-        
-        Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
-        Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
-        
-        Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
-        
-        for (int i = 0; i < (int)parts.size(); i++) {
-            parts[i]->update(position, worldMatrix);
-        }
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->update(worldMatrix);
-        }
-    }
-    deltaPositionXZ = Vector2f::zero;
-    deltaRotationY = 0.f;
 }
 
-void Car::walk(Car::WalkInput input, float speed) {
-    if (input == WalkInput::None) { return; }
-    
-    float sinAngle = std::sin(rotation.y);
-    float cosAngle = std::cos(rotation.y);
-    
-    Vector2f targetDir = Vector2f::zero;
-    if ((input & WalkInput::Forward) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(sinAngle,cosAngle));
-    }
-    if ((input & WalkInput::Backward) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(-sinAngle,-cosAngle));
-    }
+void Car::updateTireRotation(WalkInput input, float speed) {
     float deltaTireRotation = 0.f;
     if ((input & WalkInput::Left) != WalkInput::None) {
         deltaTireRotation -= speed;
@@ -275,16 +276,23 @@ void Car::walk(Car::WalkInput input, float speed) {
     for (int i = 0; i < 4; i++) {
         wheels[i]->setTireRotation(tireRotation);
     }
+}
+
+bool Car::deltaPositionCausesCollision() {
+    Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
+    Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
+    collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
     
-    if (targetDir.lengthSquared() < 0.01f) { return; }
-    
-    if ((input & WalkInput::Forward) != WalkInput::None) {
-        deltaRotationY = tireRotation * 0.05f;
-    } else if ((input & WalkInput::Backward) != WalkInput::None) {
-        deltaRotationY = tireRotation * -0.05f;
+    for (int i = 0; i < (int)allCars.size(); i++) {
+        if (allCars[i] == this) { continue; }
+        
+        RectCollider::CollisionDir dir;
+        if (collider.collides(allCars[i]->collider, dir)) {
+            return true;
+        }
     }
     
-    acceleration = targetDir.normalize().multiply(speed);
+    return false;
 }
 
 void Car::setShader(Shader* shd) {
