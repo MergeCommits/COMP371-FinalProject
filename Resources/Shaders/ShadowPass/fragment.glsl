@@ -67,12 +67,12 @@ void main() {
     vec3 diffuseColor = phongDiff * lightColor;
     
     // Specular color.
-    vec3 viewDirection = normalize(cameraPosition - fsPosition);
-    vec3 reflectOverNormal = reflect(-lightDirection, normal);
-    float phongSpec = dot(viewDirection, reflectOverNormal);
-    
     vec3 specularColor = vec3(0.0f);
-    if (phongSpec > 0.0f) {
+    if (dot(lightDirection, normal) > 0.0f) {
+        vec3 viewDirection = normalize(cameraPosition - fsPosition);
+        vec3 reflectOverNormal = reflect(-lightDirection, normal);
+        float phongSpec = max(dot(viewDirection, reflectOverNormal), 0.0f);
+
         float shineCoefficient = 32.0f;
         phongSpec = pow(phongSpec, shineCoefficient);
         specularColor = phongSpec * lightColor;

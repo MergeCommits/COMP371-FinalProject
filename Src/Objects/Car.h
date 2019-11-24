@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 #include "../Math/Vector.h"
+#include "../Math/Matrix.h"
 
 class Cube;
 class Wheel;
@@ -27,7 +28,7 @@ private:
     
     const float INPUT_ACCELERATION = 1.f;
     const float TURN_SPEED = 7.f;
-    const float TERMINAL_VELOCITY = 0.5f;
+    const float TERMINAL_VELOCITY = 0.25f;
     const float FRICTION = 1.f;
     
     Vector3f position;
@@ -40,6 +41,8 @@ private:
     float tireRotation;
     GLenum renderingMode;
     
+    Matrix4x4f rotationMatrix;
+    
     Texture* metalTexture;
     Texture* tireTexture;
     
@@ -49,7 +52,7 @@ private:
     
     void updateAcceleration(WalkInput input, float speed);
     void updateVelocity(Car::WalkInput input, float timestep);
-    void updatePosition();
+    void updatePosition(WalkInput input);
     void updateTireRotation(WalkInput input, float speed);
     bool deltaPositionCausesCollision(const Car* collidedCar);
     
@@ -58,11 +61,14 @@ public:
     ~Car();
     
     void addPositionXZ(const Vector2f& vect);
+    Vector3f getPosition() const;
     void addScale(float sca);
     void addRotationX(float bruh);
     void addRotationY(float bruh);
     void addRotationZ(float bruh);
     void setRenderingMode(GLenum mode);
+    
+    Matrix4x4f getRotationMatrix() const;
     
     void setShader(Shader* shd);
     

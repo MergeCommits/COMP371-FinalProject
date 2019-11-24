@@ -77,10 +77,10 @@ public:
     void setShader(Shader* shd);
     
     void constructWorldMat();
-    void constructWorldMat(const Vector3f& origin, const Matrix4x4f& originWorldMatrix);
+    void constructWorldMat( const Matrix4x4f& originWorldMatrix);
     Matrix4x4f getWorldMatrix() const;
 
-    void update(const Vector3f& origin, const Matrix4x4f& originWorldMatrix);
+    void update(const Matrix4x4f& originWorldMatrix);
     void render() const;
 };
 

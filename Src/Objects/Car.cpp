@@ -131,6 +131,10 @@ void Car::addPositionXZ(const Vector2f& vect) {
     }
 }
 
+Vector3f Car::getPosition() const {
+    return position;
+}
+
 void Car::addScale(float sca) {
     scale = scale.add(Vector3f(sca, sca, sca));
 }
@@ -181,7 +185,7 @@ void Car::update(Car::WalkInput input, float timestep) {
         deltaRotationY = 0.f;
     }
     
-    updatePosition();
+    updatePosition(input);
     
     deltaPositionXZ = Vector2f::zero;
     deltaRotationY = 0.f;
@@ -230,29 +234,32 @@ void Car::updateVelocity(Car::WalkInput input, float timestep) {
             velocity = velocity.multiply(reducedLength / velocityMagnitude);
         }
     }
-    
-    // Cap velocity as its terminal.
-    if (velocity.x > TERMINAL_VELOCITY) { velocity.x = TERMINAL_VELOCITY; }
-    else if (velocity.x < -TERMINAL_VELOCITY) { velocity.x = -TERMINAL_VELOCITY; }
-    
-    if (velocity.y > TERMINAL_VELOCITY) { velocity.y = TERMINAL_VELOCITY; }
-    else if (velocity.y < -TERMINAL_VELOCITY) { velocity.y = -TERMINAL_VELOCITY; }
 }
 
-void Car::updatePosition() {
+void Car::updatePosition(WalkInput input) {
     addPositionXZ(deltaPositionXZ);
-    for (int i = 0; i < 4; i++) {
-        wheels[i]->addRotationZ(-deltaPositionXZ.length());
-    }
     addRotationY(deltaRotationY);
     
-    Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
+    float magnitude = 0.f;
+    if ((input & WalkInput::Forward) != WalkInput::None) {
+        magnitude = deltaPositionXZ.length();
+    } else if ((input & WalkInput::Backward) != WalkInput::None) {
+        magnitude = -deltaPositionXZ.length();
+    }
+    
+    if (!MathUtil::eqFloats(magnitude, 0.f)) {
+        for (int i = 0; i < 4; i++) {
+            wheels[i]->addRotationZ(magnitude);
+        }
+    }
+    
+    rotationMatrix = Matrix4x4f::rotate(rotation, position);
     Matrix4x4f scaleMatrix = Matrix4x4f::scale(scale, position);
     
     Matrix4x4f worldMatrix = scaleMatrix.product(rotationMatrix);
     
     for (int i = 0; i < (int)parts.size(); i++) {
-        parts[i]->update(position, worldMatrix);
+        parts[i]->update(worldMatrix);
     }
     for (int i = 0; i < 4; i++) {
         wheels[i]->update(worldMatrix);
@@ -308,6 +315,10 @@ bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     }
     
     return didCollide;
+}
+
+Matrix4x4f Car::getRotationMatrix() const {
+    return rotationMatrix;
 }
 
 void Car::setShader(Shader* shd) {

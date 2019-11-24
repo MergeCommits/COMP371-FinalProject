@@ -7,6 +7,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "InputUtil.h"
 #include "Timing.h"
 #include "Controllers/Player.h"
 #include "Objects/Car.h"
@@ -324,16 +325,6 @@ int lastKeyXState = GLFW_RELEASE;
 int lastKeyBState = GLFW_RELEASE;
 int lastKeyKState = GLFW_RELEASE;
 
-static bool inputHit(GLFWwindow* window, int key, int& lastKeyState) {
-    int prevState = lastKeyState;
-    lastKeyState = glfwGetKey(window, key);
-    if (prevState == GLFW_RELEASE) {
-        return lastKeyState == GLFW_PRESS;
-    }
-    
-    return false;
-}
-
 void updateInputs(float timestep, GLFWwindow* window, Camera* cam) {
     // Cursor position.
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -342,17 +333,17 @@ void updateInputs(float timestep, GLFWwindow* window, Camera* cam) {
     }
     
     // Toggle textures.
-    if (inputHit(window, GLFW_KEY_X, lastKeyXState)) {
+    if (InputUtil::keyHit(window, GLFW_KEY_X, lastKeyXState)) {
         enableTextures = !enableTextures;
     }
     
     // Toggle shadow map.
-    if (inputHit(window, GLFW_KEY_B, lastKeyBState)) {
+    if (InputUtil::keyHit(window, GLFW_KEY_B, lastKeyBState)) {
         enableShadows = !enableShadows;
     }
     
     // Toggle depth map view.
-    if (inputHit(window, GLFW_KEY_K, lastKeyKState)) {
+    if (InputUtil::keyHit(window, GLFW_KEY_K, lastKeyKState)) {
         debugDepthMap = !debugDepthMap;
     }
     

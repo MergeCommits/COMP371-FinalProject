@@ -52,6 +52,7 @@ public:
     void addAngle(float xAngle, float yAngle);
     void resetAngle();
     void setThirdPersonPerspective(bool bruh);
+    bool isThirdPerson() const;
     
     void addFov(float deg);
     void setXYClippings(int w, int h);

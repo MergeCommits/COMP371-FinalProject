@@ -23,7 +23,7 @@ Camera::Camera(int w, int h, float fov, float nearZ, float farZ, bool orthograph
     this->height = h;
     this->orthographicProj = orthographic;
     this->thirdPerson = false;
-    this->thirdPersonRadius = 5.f;
+    this->thirdPersonRadius = 10.f;
 
     rotation = Matrix4x4f::identity;
 
@@ -143,6 +143,10 @@ void Camera::resetAngle() {
 void Camera::setThirdPersonPerspective(bool bruh) {
     needsViewUpdate = bruh != thirdPerson;
     thirdPerson = bruh;
+}
+
+bool Camera::isThirdPerson() const {
+    return thirdPerson;
 }
 
 void Camera::addFov(float deg) {
