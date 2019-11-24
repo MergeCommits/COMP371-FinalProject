@@ -127,6 +127,7 @@ int main() {
     // Players.
     Player* player = new Player(defaultShader, width, height);
     player->getCamera()->setPosition(Vector3f(0.f, 5.f, -10.f));
+    player->getCamera()->addAngle(MathUtil::PI / 2.f, 0.f);
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(shadowPassShader);
     
@@ -144,10 +145,10 @@ int main() {
     
     Axis* xAxis = new Axis(defaultShader);
     xAxis->color = Vector4f(1.f, 0.f, 0.f, 1.f);
-    xAxis->rotation = Vector3f(0.f, MathUtil::PI / 2.f, 0.f);
+    xAxis->rotation = Vector3f(0.f, MathUtil::PI / -2.f, 0.f);
     Axis* yAxis = new Axis(defaultShader);
     yAxis->color = Vector4f(0.f, 0.f, 1.f, 1.f);
-    yAxis->rotation = Vector3f(MathUtil::PI / -2.f, 0.f, 0.f);
+    yAxis->rotation = Vector3f(MathUtil::PI / 2.f, 0.f, 0.f);
     Axis* zAxis = new Axis(defaultShader);
     zAxis->color = Vector4f(0.f, 0.75f, 0.f, 1.f);
     

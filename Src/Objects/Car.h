@@ -25,8 +25,14 @@ public:
 private:
     static std::vector<const Car*> allCars;
     
+    const float DEFAULT_ACCELERATION = 3.f;
+    const float TERMINAL_VELOCITY = 0.5f;
+    const float FRICTION = 1.f;
+    
     Vector3f position;
     Vector2f deltaPositionXZ;
+    Vector2f velocity;
+    Vector2f acceleration;
     Vector3f scale;
     Vector2f colliderScale;
     Vector3f rotation;
@@ -41,7 +47,7 @@ private:
     Wheel* wheels[4];
     RectCollider collider;
     
-    void walk(WalkInput input, float speed);
+    void walk(WalkInput input, float timestep);
     
 public:
     Car(Shader* shd);
@@ -56,7 +62,7 @@ public:
     
     void setShader(Shader* shd);
     
-    void update(WalkInput input, float speed);
+    void update(WalkInput input, float timestep);
     void render();
 };
 

@@ -26,7 +26,7 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     for (int i = 0; i < 4; i++) {
         Vector2f intersectPoint;
         if (line.intersects(colLines[i], intersectPoint)) {
-            std::cout << "CONTACT POINT: (" << intersectPoint.x << ", " << intersectPoint.y << std::endl;
+//            std::cout << "CONTACT POINT: (" << intersectPoint.x << ", " << intersectPoint.y << std::endl;
             intersectionDeepness = colLines[i].closestPoint(intersectPoint).distance(intersectPoint);
             return true;
         }

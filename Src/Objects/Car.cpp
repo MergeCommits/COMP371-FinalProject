@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 
 #include "Car.h"
 #include "Cube.h"
@@ -21,7 +22,7 @@ Car::Car(Shader* shd) {
                             Vector2f(0.5f, -0.5f)
                             );
     
-    colliderScale = Vector2f(4.f, 6.f);
+    colliderScale = Vector2f(4.f, 8.4f);
     
     Cube* bottom = new Cube(shd);
     bottom->setScale(4.f, 0.5f, 6.f);
@@ -36,7 +37,7 @@ Car::Car(Shader* shd) {
     front->setScale(3.f, 1.25f, 1.5f);
     front->setPosition(0.f, 1.f, 3.75f);
     Cube* back = new Cube(shd);
-    back->setScale(3.f, 1.25f, 0.75f);
+    back->setScale(3.f, 1.25f, 1.5f);
     back->setPosition(0.f, 1.f, -3.375f);
 
     // Sides of the car.
@@ -68,13 +69,13 @@ Car::Car(Shader* shd) {
     botRightPillar->setPosition(1.75f, 2.25f, -2.75f);
     
     wheels[0] = new Wheel(shd);
-    wheels[0]->setPosition(2.5f, 0.f, 2.25f);
+    wheels[0]->setPosition(2.f, 0.f, 2.5f);
     wheels[1] = new Wheel(shd);
-    wheels[1]->setPosition(2.5f, 0.f, -2.25f);
+    wheels[1]->setPosition(2.f, 0.f, -2.5f);
     wheels[2] = new Wheel(shd);
-    wheels[2]->setPosition(-2.f, 0.f, 2.25f);
+    wheels[2]->setPosition(-2.5f, 0.f, 2.25f);
     wheels[3] = new Wheel(shd);
-    wheels[3]->setPosition(-2.f, 0.f, -2.25f);
+    wheels[3]->setPosition(-2.5f, 0.f, -2.25f);
     
     for (int i = 0; i < 4; i++) {
         wheels[i]->color = Vector4f(0.2f, 0.2f, 0.2f, 1.f);
@@ -96,6 +97,7 @@ Car::Car(Shader* shd) {
     metalTexture = new Texture("Textures/metal.jpg");
     tireTexture = new Texture("Textures/tire.png");
     tireRotation = 0.f;
+    deltaRotationY = 0.f;
     scale = Vector3f::one;
 }
 
@@ -161,8 +163,42 @@ void Car::setRenderingMode(GLenum mode) {
     renderingMode = mode;
 }
 
-void Car::update(Car::WalkInput input, float speed) {
+void Car::update(Car::WalkInput input, float timestep) {
+    float speed = DEFAULT_ACCELERATION * timestep;
+    acceleration = Vector2f::zero;
+    
+    // Movement.
     walk(input, speed);
+    
+    // Apply acceleration and friction to velocity.
+    velocity = velocity.add(acceleration);
+    
+    float timestepFriction = FRICTION * timestep;
+    
+    if (!MathUtil::eqFloats(velocity.x, 0.f) || !MathUtil::eqFloats(velocity.y, 0.f)) {
+        float velocityMagnitude = velocity.length();
+        float reducedLength = MathUtil::maxFloat(velocityMagnitude - timestepFriction, 0.f);
+        velocity = velocity.multiply(reducedLength / velocityMagnitude);
+    }
+    
+    if (!MathUtil::eqFloats(velocity.x, 0.f) || !MathUtil::eqFloats(velocity.y, 0.f)) {
+        float velocityMagnitude = velocity.length();
+        if (velocityMagnitude > TERMINAL_VELOCITY || velocityMagnitude < -TERMINAL_VELOCITY) {
+            float reducedLength = TERMINAL_VELOCITY;
+            velocity = velocity.multiply(reducedLength / velocityMagnitude);
+        }
+    }
+    
+    // Cap velocity as its terminal.
+    if (velocity.x > TERMINAL_VELOCITY) { velocity.x = TERMINAL_VELOCITY; }
+    else if (velocity.x < -TERMINAL_VELOCITY) { velocity.x = -TERMINAL_VELOCITY; }
+    
+    if (velocity.y > TERMINAL_VELOCITY) { velocity.y = TERMINAL_VELOCITY; }
+    else if (velocity.y < -TERMINAL_VELOCITY) { velocity.y = -TERMINAL_VELOCITY; }
+    
+    
+    std::cout << "VELOCITY: " << velocity.x << ", " << velocity.y << std::endl;
+    deltaPositionXZ = velocity;
     
     // Collision.
     Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
@@ -182,6 +218,9 @@ void Car::update(Car::WalkInput input, float speed) {
     
     if (!coll) {
         addPositionXZ(deltaPositionXZ);
+        for (int i = 0; i < 4; i++) {
+            wheels[i]->addRotationZ(-deltaPositionXZ.length());
+        }
         addRotationY(deltaRotationY);
         
         Matrix4x4f rotationMatrix = Matrix4x4f::rotate(rotation, position);
@@ -203,31 +242,22 @@ void Car::update(Car::WalkInput input, float speed) {
 void Car::walk(Car::WalkInput input, float speed) {
     if (input == WalkInput::None) { return; }
     
-    float sinAngle = std::sin(-rotation.y); // Negative this to use the correct coordinate system.
+    float sinAngle = std::sin(rotation.y);
     float cosAngle = std::cos(rotation.y);
     
     Vector2f targetDir = Vector2f::zero;
     if ((input & WalkInput::Forward) != WalkInput::None) {
         targetDir = targetDir.add(Vector2f(sinAngle,cosAngle));
-        // Rotate wheels.
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->addRotationX(-speed);
-        }
     }
     if ((input & WalkInput::Backward) != WalkInput::None) {
         targetDir = targetDir.add(Vector2f(-sinAngle,-cosAngle));
-        // Rotate wheels.
-        for (int i = 0; i < 4; i++) {
-            wheels[i]->addRotationX(speed);
-        }
     }
-    
     float deltaTireRotation = 0.f;
     if ((input & WalkInput::Left) != WalkInput::None) {
-        deltaTireRotation += speed;
+        deltaTireRotation -= speed;
     }
     if ((input & WalkInput::Right) != WalkInput::None) {
-        deltaTireRotation -= speed;
+        deltaTireRotation += speed;
     }
     
     float tireReturnToCenterSpeed = speed * 0.75f;
@@ -254,7 +284,7 @@ void Car::walk(Car::WalkInput input, float speed) {
         deltaRotationY = tireRotation * -0.05f;
     }
     
-    deltaPositionXZ = targetDir.normalize().multiply(speed);
+    acceleration = targetDir.normalize().multiply(speed);
 }
 
 void Car::setShader(Shader* shd) {

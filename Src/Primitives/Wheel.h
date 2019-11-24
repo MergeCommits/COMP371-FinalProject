@@ -8,11 +8,7 @@ class Mesh;
 class Wheel {
 private:
     Vector3f position;
-    // Scales relative to an arbitrary origin.
-    Vector3f scaleOrigin;
     Vector3f scale;
-    // Rotations relative to an arbitrary origin.
-    Vector3f rotationOrigin;
     Vector3f rotation;
     // Lateral rotation of wheels.
     float tireRotation;

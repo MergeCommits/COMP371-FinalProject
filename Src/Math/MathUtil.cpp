@@ -21,3 +21,13 @@ float MathUtil::clampFloat(float val, float min, float max) {
     if (val >= max) { return max; }
     return val;
 }
+
+float MathUtil::minFloat(float val1, float val2) {
+    if (val1 <= val2) { return val1; }
+    return val2;
+}
+
+float MathUtil::maxFloat(float val1, float val2) {
+    if (val1 >= val2) { return val1; }
+    return val2;
+}

@@ -54,11 +54,7 @@ private:
     };
 
     Vector3f position;
-    // Scales relative to an arbitrary origin.
-    Vector3f scaleOrigin;
     Vector3f scale;
-    // Rotations relative to an arbitrary origin.
-    Vector3f rotationOrigin;
     Vector3f rotation;
 
     Mesh* mesh;

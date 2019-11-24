@@ -22,7 +22,7 @@ Camera::Camera(int w, int h, float fov, float nearZ, float farZ, bool orthograph
     this->width = w;
     this->height = h;
     this->orthographicProj = orthographic;
-    this->thirdPerson = true;
+    this->thirdPerson = false;
     this->thirdPersonRadius = 5.f;
 
     rotation = Matrix4x4f::identity;

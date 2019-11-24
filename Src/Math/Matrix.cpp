@@ -86,21 +86,21 @@ Matrix4x4f Matrix4x4f::rotate(const Vector3f& rotation) {
     float cosRoll = cos(rotation.z);
     
     Matrix4x4f pitchMat = Matrix4x4f(1.f,0.f,0.f,0.f,
-                                     0.f,cosPitch,-sinPitch,0.f,
-                                     0.f,sinPitch,cosPitch,0.f,
+                                     0.f,cosPitch,sinPitch,0.f,
+                                     0.f,-sinPitch,cosPitch,0.f,
                                      0.f,0.f,0.f,1.f);
     
-    Matrix4x4f yawMat = Matrix4x4f(cosYaw,0.f,sinYaw,0.f,
+    Matrix4x4f yawMat = Matrix4x4f(cosYaw,0.f,-sinYaw,0.f,
                                    0.f,1.f,0.f,0.f,
-                                   -sinYaw,0.f,cosYaw,0.f,
+                                   sinYaw,0.f,cosYaw,0.f,
                                    0.f,0.f,0.f,1.f);
     
-    Matrix4x4f rollMat = Matrix4x4f(cosRoll,-sinRoll,0.f,0.f,
-                                    sinRoll,cosRoll,0.f,0.f,
+    Matrix4x4f rollMat = Matrix4x4f(cosRoll,sinRoll,0.f,0.f,
+                                    -sinRoll,cosRoll,0.f,0.f,
                                     0.f,0.f,1.f,0.f,
                                     0.f,0.f,0.f,1.f);
     
-    return yawMat.product(pitchMat.product(rollMat));
+    return rollMat.product(pitchMat.product(yawMat));
 }
 
 Matrix4x4f Matrix4x4f::rotate(const Vector3f& rotation, const Vector3f& origin) {

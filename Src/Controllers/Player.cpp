@@ -29,15 +29,6 @@ void Player::setCarShader(Shader* shd) {
 }
 
 void Player::update(float timestep, GLFWwindow* window) {
-    // Movement.
-    float speed = 5.f;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        speed += 15.f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-        speed = 2.f;
-    }
-    
     Car::WalkInput input = Car::WalkInput::None;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         input = input | Car::WalkInput::Forward;
@@ -51,7 +42,7 @@ void Player::update(float timestep, GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         input = input | Car::WalkInput::Right;
     }
-    car->update(input, timestep * speed);
+    car->update(input, timestep);
 
 	camera->update();
 }

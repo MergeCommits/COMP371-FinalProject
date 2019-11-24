@@ -34,7 +34,6 @@ Cube::Cube(Shader* shd) {
 
     color = Vector4f(1.f, 0.f, 0.f, 1.f);
     scale = Vector3f::one;
-    scaleOrigin = Vector3f::one;
 }
 
 void Cube::setPosition(float x, float y, float z) {

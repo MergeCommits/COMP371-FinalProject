@@ -14,6 +14,9 @@ public:
     // Clamps an integer between a min and max inclusively.
     static int clamp(int val, int min, int max);
     static float clampFloat(float val, float min, float max);
+    
+    static float minFloat(float val1, float val2);
+    static float maxFloat(float val1, float val2);
 };
 
 #endif // MATH_H_INCLUDED

@@ -34,8 +34,6 @@ Wheel::Wheel(Shader* shd) {
                 verts.push_back(currMesh.Vertices[i].Normal.Z);
                 verts.push_back((std::rand() % 10) / 10.f);
                 verts.push_back((std::rand() % 10) / 10.f);
-//                verts.push_back(currMesh.Vertices[i].TextureCoordinate.X);
-//                verts.push_back(currMesh.Vertices[i].TextureCoordinate.Y);
             }
 
             mesh->setGeometry(verts, prims);
@@ -46,7 +44,6 @@ Wheel::Wheel(Shader* shd) {
     
     color = Vector4f(1.f, 0.f, 0.f, 1.f);
     scale = Vector3f(0.025f, 0.025f, 0.025f);
-    scaleOrigin = Vector3f::one;
     rotation.y = MathUtil::PI / 2.f;
     tireRotation = 0.f;
 }
