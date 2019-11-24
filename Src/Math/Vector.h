@@ -1,6 +1,8 @@
 #ifndef VECTOR_H_INCLUDED
 #define VECTOR_H_INCLUDED
 
+#include "MathUtil.h"
+
 class Vector2f; class Vector3f;
 
 class Vector2f {
@@ -17,7 +19,7 @@ public:
     float distanceSquared(const Vector2f& b) const;
     float distance(const Vector2f& b) const;
 
-    bool equals(const Vector2f& b,float epsilon=0.002f) const;
+    bool equals(const Vector2f& b,float epsilon=MathUtil::MARGIN_ERROR) const;
 
     Vector2f add(const Vector2f& b) const;
     Vector2f subtract(const Vector2f& b) const;
@@ -28,6 +30,7 @@ public:
     Vector2f negate() const;
     Vector2f reflect(const Vector2f& n) const;
     float dotProduct(const Vector2f& b) const;
+    float crossProduct(const Vector2f& b) const;
 
     static const Vector2f zero;
     static const Vector2f one;

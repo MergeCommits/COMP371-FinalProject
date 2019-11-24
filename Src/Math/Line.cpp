@@ -16,26 +16,49 @@ Line2f::Line2f(float ax, float ay, float bx, float by) {
     pointA = Vector2f(ax, ay); pointB = Vector2f(bx, by);
 }
 
-Rectanglef Line2f::boundingBox() const {
-    return Rectanglef(pointA,pointB);
-}
+bool Line2f::intersects(const Line2f& other) const {
+    Vector2f r = pointB.subtract(pointA);
+    Vector2f s = other.pointB.subtract(other.pointA);
 
-bool Line2f::intersects(const Line2f& other, Vector2f& point) const {
-    Vector2f p1a = pointA;
-    Vector2f p1b = pointB;
-    
-    Vector2f p2a = other.pointA;
-    Vector2f p2b = other.pointB;
+    float uNumerator = other.pointA.subtract(pointA).crossProduct(r);
+    float denominator = r.crossProduct(s);
 
-    float denominator = ((p1a.x - p1b.x) * (p2a.y - p2b.y)) - ((p1a.y - p1b.y) * (p2a.x - p2b.x));
-    // Are they lines parallel?
-    if (fabs(denominator) < MathUtil::MARGIN_ERROR) { return false; }
+    if (MathUtil::eqFloats(uNumerator, 0.f) && MathUtil::eqFloats(denominator, 0.f)) {
+        // They are colinear.
 
-    point.x = (((p1a.x * p1b.y) - (p1a.y * p1b.x)) * (p2a.x - p2b.x)) - ((p1a.x - p1b.x) * ((p2a.x * p2b.y) - (p2a.y * p2b.x)));
-    point.y = (((p1a.x * p1b.y) - (p1a.y * p1b.x)) * (p2a.y - p2b.y)) - ((p1a.y - p1b.y) * ((p2a.x * p2b.y) - (p2a.y * p2b.x)));
-    point = point.multiply(1.f / denominator);
+        // Any touch?
+        bool contact1 = pointA.equals(other.pointA);
+        bool contact2 = pointA.equals(other.pointB);
+        bool contact3 = pointB.equals(other.pointA);
+        bool contact4 = pointB.equals(other.pointB);
+        if (contact1 || contact2 || contact3 || contact4) {
+            return true;
+        }
 
-    return boundingBox().isPointInside(point) && other.boundingBox().isPointInside(point);
+        // Do they overlap? Are all the point differences in either direction the same sign?
+        bool allXHaveSameSign = (other.pointA.x - pointA.x < 0)
+            && (other.pointA.x - pointB.x < 0)
+            && (other.pointB.x - pointA.x < 0)
+            && (other.pointB.x - pointB.x < 0);
+        if (allXHaveSameSign) { return true; }
+        
+        
+        bool allYHaveSameSign = (other.pointA.y - pointA.y < 0)
+            && (other.pointA.y - pointB.y < 0)
+            && (other.pointB.y - pointA.y < 0)
+            && (other.pointB.y - pointB.y < 0);
+        return allYHaveSameSign;
+    }
+
+    if (MathUtil::eqFloats(denominator, 0.f)) {
+        // Lines are parallel.
+        return false;
+    }
+
+    float u = uNumerator / denominator;
+    float t = other.pointA.subtract(pointA).crossProduct(s) / denominator;
+
+    return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
 }
 
 Vector2f Line2f::closestPoint(const Vector2f& point) const {
@@ -46,6 +69,6 @@ Vector2f Line2f::closestPoint(const Vector2f& point) const {
 
     if (t < 0) { return pointA; }
     if (t > 1) { return pointB; }
-    
+
     return pointA.add(aToB.multiply(t));
 }

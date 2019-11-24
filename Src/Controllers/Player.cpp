@@ -7,8 +7,8 @@
 #include "../Graphics/Camera.h"
 #include "../Objects/Car.h"
 
-Player::Player(Shader* shd, int camWidth, int camHeight) {
-    car = new Car(shd);
+Player::Player(Shader* shd, Shader* colliderShd, int camWidth, int camHeight) {
+    car = new Car(shd, colliderShd);
     camera = new Camera(camWidth, camHeight);
     camera->addAngle(-3.14 / 2.f, 0.f);
 

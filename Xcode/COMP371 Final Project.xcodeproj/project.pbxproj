@@ -15,7 +15,6 @@
 		03CF97D11B56DF9A00F60482 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CF97D01B56DF9A00F60482 /* libfreeimage.a */; };
 		03DA72D222B02FC5009C7A21 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA72D122B02FC5009C7A21 /* libGLEW.a */; };
 		19227530238898C700A1335C /* Line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922752C238898C700A1335C /* Line.cpp */; };
-		19227531238898C700A1335C /* Rectangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922752E238898C700A1335C /* Rectangle.cpp */; };
 		1922753523889AA800A1335C /* RectCollider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753423889AA800A1335C /* RectCollider.cpp */; };
 		1922754323889B3800A1335C /* Axis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753823889B3800A1335C /* Axis.cpp */; };
 		1922754423889B3800A1335C /* Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1922753A23889B3800A1335C /* Quad.cpp */; };
@@ -64,8 +63,6 @@
 		03CF97D01B56DF9A00F60482 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = "../ThirdParty/FreeImage-3170/lib/osx/libfreeimage.a"; sourceTree = "<group>"; };
 		03DA72D122B02FC5009C7A21 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = "../ThirdParty/glew-2.1.0/lib/osx/libGLEW.a"; sourceTree = "<group>"; };
 		1922752C238898C700A1335C /* Line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Line.cpp; sourceTree = "<group>"; };
-		1922752D238898C700A1335C /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rectangle.h; sourceTree = "<group>"; };
-		1922752E238898C700A1335C /* Rectangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rectangle.cpp; sourceTree = "<group>"; };
 		1922752F238898C700A1335C /* Line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Line.h; sourceTree = "<group>"; };
 		1922753323889AA800A1335C /* RectCollider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RectCollider.h; sourceTree = "<group>"; };
 		1922753423889AA800A1335C /* RectCollider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RectCollider.cpp; sourceTree = "<group>"; };
@@ -226,8 +223,6 @@
 				193AD0E2232A8276007879F4 /* MathUtil.h */,
 				193AD0E1232A8276007879F4 /* Matrix.cpp */,
 				193AD0DE232A8276007879F4 /* Matrix.h */,
-				1922752E238898C700A1335C /* Rectangle.cpp */,
-				1922752D238898C700A1335C /* Rectangle.h */,
 				193AD0E0232A8276007879F4 /* Vector.cpp */,
 				193AD0E3232A8276007879F4 /* Vector.h */,
 			);
@@ -326,7 +321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				197123C82347F9F3006A7739 /* Texture.cpp in Sources */,
-				19227531238898C700A1335C /* Rectangle.cpp in Sources */,
 				193AD0E8232A8276007879F4 /* MathUtil.cpp in Sources */,
 				1922754823889B3800A1335C /* Cube.cpp in Sources */,
 				1922754723889B3800A1335C /* Triangle.cpp in Sources */,

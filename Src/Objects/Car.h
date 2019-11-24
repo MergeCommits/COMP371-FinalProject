@@ -49,13 +49,13 @@ private:
     RectCollider collider;
     
     void updateAcceleration(WalkInput input, float speed);
-    void updateVelocity(float timestep);
+    void updateVelocity(Car::WalkInput input, float timestep);
     void updatePosition();
     void updateTireRotation(WalkInput input, float speed);
     bool deltaPositionCausesCollision(const Car* collidedCar);
     
 public:
-    Car(Shader* shd);
+    Car(Shader* shd, Shader* colliderShd);
     ~Car();
     
     void addPositionXZ(const Vector2f& vect);

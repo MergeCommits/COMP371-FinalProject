@@ -14,7 +14,7 @@ private:
 	bool cameraFollowingCar;
     
 public:
-    Player(Shader* shd, int camWidth, int camHeight);
+    Player(Shader* shd, Shader* colliderShd, int camWidth, int camHeight);
     ~Player();
     
     Camera* getCamera() const;

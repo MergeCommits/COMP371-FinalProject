@@ -125,13 +125,13 @@ int main() {
     }
     
     // Players.
-    Player* player = new Player(defaultShader, width, height);
-    player->getCamera()->setPosition(Vector3f(0.f, 5.f, -10.f));
+    Player* player = new Player(defaultShader, defaultShader, width, height);
+    player->getCamera()->setPosition(Vector3f(0.f, 7.f, -10.f));
     player->getCamera()->addAngle(MathUtil::PI / 2.f, 0.f);
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(shadowPassShader);
     
-    Car* dummy = new Car(shadowPassShader);
+    Car* dummy = new Car(shadowPassShader, defaultShader);
     dummy->addPositionXZ(Vector2f(10.f, -5.f));
 
     // Models.

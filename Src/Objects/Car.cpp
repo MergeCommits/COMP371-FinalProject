@@ -9,7 +9,7 @@
 
 std::vector<const Car*> Car::allCars;
 
-Car::Car(Shader* shd) {
+Car::Car(Shader* shd, Shader* colliderShd) {
     allCars.push_back(this);
     
     renderingMode = GL_FILL;
@@ -18,10 +18,11 @@ Car::Car(Shader* shd) {
                             Vector2f(-0.5f, 0.5f),
                             Vector2f(0.5f, 0.5f),
                             Vector2f(-0.5f, -0.5f),
-                            Vector2f(0.5f, -0.5f)
+                            Vector2f(0.5f, -0.5f),
+                            colliderShd
                             );
     
-    colliderScale = Vector2f(4.f, 6.f);
+    colliderScale = Vector2f(4.f, 8.f);
     
     Cube* bottom = new Cube(shd);
     bottom->setScale(4.f, 0.5f, 6.f);
@@ -32,12 +33,12 @@ Car::Car(Shader* shd) {
     roof->setPosition(0.f, 3.5f, 0.f);
     roof->color = Vector4f(0.25f, 0.25f, 1.f, 1.f);
 
-//    Cube* front = new Cube(shd);
-//    front->setScale(3.f, 1.25f, 1.5f);
-//    front->setPosition(0.f, 1.f, 3.75f);
-//    Cube* back = new Cube(shd);
-//    back->setScale(3.f, 1.25f, 1.5f);
-//    back->setPosition(0.f, 1.f, -3.375f);
+    Cube* front = new Cube(shd);
+    front->setScale(3.f, 1.f, 1.5f);
+    front->setPosition(0.f, 1.f, 3.75f);
+    Cube* back = new Cube(shd);
+    back->setScale(3.f, 1.f, 1.5f);
+    back->setPosition(0.f, 1.f, -3.375f);
 
     // Sides of the car.
     Cube* leftWall = new Cube(shd);
@@ -82,8 +83,8 @@ Car::Car(Shader* shd) {
 
     parts.push_back(bottom);
     parts.push_back(roof);
-//    parts.push_back(front);
-//    parts.push_back(back);
+    parts.push_back(front);
+    parts.push_back(back);
     parts.push_back(leftWall);
     parts.push_back(rightWall);
     parts.push_back(frontWall);
@@ -170,7 +171,7 @@ void Car::update(Car::WalkInput input, float timestep) {
         updateAcceleration(input, INPUT_ACCELERATION * timestep);
     }
     
-    updateVelocity(timestep);
+    updateVelocity(input, timestep);
     deltaPositionXZ = velocity;
     
     Car* collidedCar = nullptr;
@@ -209,16 +210,17 @@ void Car::updateAcceleration(Car::WalkInput input, float speed) {
     acceleration = targetDir.normalize().multiply(speed);
 }
 
-void Car::updateVelocity(float timestep) {
-    // Apply acceleration and friction to velocity.
+void Car::updateVelocity(Car::WalkInput input, float timestep) {
     velocity = velocity.add(acceleration);
     
-    float timestepFriction = FRICTION * timestep;
-    
-    if (!MathUtil::eqFloats(velocity.x, 0.f) || !MathUtil::eqFloats(velocity.y, 0.f)) {
-        float velocityMagnitude = velocity.length();
-        float reducedLength = MathUtil::maxFloat(velocityMagnitude - timestepFriction, 0.f);
-        velocity = velocity.multiply(reducedLength / velocityMagnitude);
+    if (input == WalkInput::None) {
+        float timestepFriction = FRICTION * timestep;
+        
+        if (!MathUtil::eqFloats(velocity.x, 0.f) || !MathUtil::eqFloats(velocity.y, 0.f)) {
+            float velocityMagnitude = velocity.length();
+            float reducedLength = MathUtil::maxFloat(velocityMagnitude - timestepFriction, 0.f);
+            velocity = velocity.multiply(reducedLength / velocityMagnitude);
+        }
     }
     
     if (!MathUtil::eqFloats(velocity.x, 0.f) || !MathUtil::eqFloats(velocity.y, 0.f)) {
@@ -288,17 +290,24 @@ bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
     collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
     
+    bool didCollide = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
         if (allCars[i] == this) { continue; }
         
         RectCollider::CollisionDir dir;
         if (collider.collides(allCars[i]->collider, dir)) {
             collidedCar = allCars[i];
-            return true;
+            didCollide = true;
+            break;
         }
     }
     
-    return false;
+    if (didCollide) {
+        // Restore original collider.
+        collider.update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
+    }
+    
+    return didCollide;
 }
 
 void Car::setShader(Shader* shd) {
@@ -321,6 +330,8 @@ void Car::render() {
         wheels[i]->render();
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    collider.render();
 }
 
 const Car::WalkInput operator&(const Car::WalkInput& a, const Car::WalkInput& b) {
