@@ -7,7 +7,6 @@
 #include "Shader.h"
 
 class Mesh;
-class Axis;
 
 class RectCollider {
 private:
@@ -21,18 +20,13 @@ private:
     Line2f bottom;
     Line2f left;
     
-    Axis* axisTop = nullptr;
-    Axis* axisRight = nullptr;
-    Axis* axisBottom = nullptr;
-    Axis* axisLeft = nullptr;
-    
     Mesh* mesh;
     Matrix4x4f worldMatrix;
     Shader::Uniform* worldMatrixUniform;
     Shader::Uniform* colorUniform;
     
     static Vector2f transformXZCoordinates(const Vector2f& xzCoordinates, const Matrix4x4f& worldMatrix);
-    static bool lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other);
+    static bool lineSegmentIntersectsCollider(const Line2f& line, const RectCollider* other);
     
 public:
     enum class CollisionDir {
@@ -47,7 +41,7 @@ public:
     RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2f& bl, const Vector2f& br, Shader* shd);
     ~RectCollider();
     
-    bool collides(const RectCollider& other, CollisionDir& collisionSide) const;
+    bool collides(const RectCollider* other, CollisionDir& collisionSide) const;
     
     void update(const Matrix4x4f& worldMatrix);
     void render() const;

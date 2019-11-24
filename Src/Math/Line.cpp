@@ -41,8 +41,7 @@ bool Line2f::intersects(const Line2f& other) const {
             && (other.pointB.x - pointA.x < 0)
             && (other.pointB.x - pointB.x < 0);
         if (allXHaveSameSign) { return true; }
-        
-        
+
         bool allYHaveSameSign = (other.pointA.y - pointA.y < 0)
             && (other.pointA.y - pointB.y < 0)
             && (other.pointB.y - pointA.y < 0)

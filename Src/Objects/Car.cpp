@@ -1,10 +1,11 @@
 #include <cmath>
 
 #include "Car.h"
-#include "Cube.h"
-#include "Wheel.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "RectCollider.h"
+#include "../Primitives/Cube.h"
+#include "../Primitives/Wheel.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
 #include "../Math/MathUtil.h"
 
 std::vector<const Car*> Car::allCars;
@@ -14,7 +15,7 @@ Car::Car(Shader* shd, Shader* colliderShd) {
     
     renderingMode = GL_FILL;
 
-    collider = RectCollider(
+    collider = new RectCollider(
                             Vector2f(-0.5f, 0.5f),
                             Vector2f(0.5f, 0.5f),
                             Vector2f(-0.5f, -0.5f),
@@ -111,6 +112,7 @@ Car::~Car() {
     }
     delete metalTexture;
     delete tireTexture;
+    delete collider;
     
     for (int i = 0; i < (int)allCars.size(); i++) {
         if (allCars[i] == this) {
@@ -288,14 +290,14 @@ void Car::updateTireRotation(WalkInput input, float speed) {
 bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
     Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
-    collider.update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
+    collider->update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
     
     bool didCollide = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
         if (allCars[i] == this) { continue; }
         
         RectCollider::CollisionDir dir;
-        if (collider.collides(allCars[i]->collider, dir)) {
+        if (collider->collides(allCars[i]->collider, dir)) {
             collidedCar = allCars[i];
             didCollide = true;
             break;
@@ -304,7 +306,7 @@ bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     
     if (didCollide) {
         // Restore original collider.
-        collider.update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
+        collider->update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
     }
     
     return didCollide;
@@ -331,7 +333,7 @@ void Car::render() {
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
-    collider.render();
+    collider->render();
 }
 
 const Car::WalkInput operator&(const Car::WalkInput& a, const Car::WalkInput& b) {

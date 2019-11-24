@@ -5,12 +5,12 @@
 #include <GL/glew.h>
 
 #include "../Math/Vector.h"
-#include "RectCollider.h"
 
 class Cube;
 class Wheel;
 class Shader;
 class Texture;
+class RectCollider;
 
 class Car {
 public:
@@ -25,7 +25,7 @@ public:
 private:
     static std::vector<const Car*> allCars;
     
-    const float INPUT_ACCELERATION = 3.f;
+    const float INPUT_ACCELERATION = 1.f;
     const float TURN_SPEED = 7.f;
     const float TERMINAL_VELOCITY = 0.5f;
     const float FRICTION = 1.f;
@@ -46,7 +46,7 @@ private:
     
     std::vector<Cube*> parts;
     Wheel* wheels[4];
-    RectCollider collider;
+    RectCollider* collider;
     
     void updateAcceleration(WalkInput input, float speed);
     void updateVelocity(Car::WalkInput input, float timestep);

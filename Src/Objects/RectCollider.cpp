@@ -1,5 +1,4 @@
 #include "RectCollider.h"
-#include "../Primitives/Axis.h"
 #include "../Graphics/Mesh.h"
 
 static void pushNormalsToVector(std::vector<float>& vect) {
@@ -43,11 +42,41 @@ RectCollider::RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2
     verts.push_back(bottomLeft.y);
     pushNormalsToVector(verts);
     
+    verts.push_back(topLeft.x);
+    verts.push_back(0.f);
+    verts.push_back(topLeft.y);
+    pushNormalsToVector(verts);
+
+    verts.push_back(topRight.x);
+    verts.push_back(0.f);
+    verts.push_back(topRight.y);
+    pushNormalsToVector(verts);
+
+    verts.push_back(bottomRight.x);
+    verts.push_back(0.f);
+    verts.push_back(bottomRight.y);
+    pushNormalsToVector(verts);
+
+    verts.push_back(bottomLeft.x);
+    verts.push_back(0.f);
+    verts.push_back(bottomLeft.y);
+    pushNormalsToVector(verts);
+    
     std::vector<int> prims = {
         0, 1,
         1, 2,
         2, 3,
-        3, 0
+        3, 0,
+        
+        4, 5,
+        5, 6,
+        6, 7,
+        7, 4,
+        
+        0, 4,
+        1, 5,
+        2, 6,
+        3, 7
     };
     
     mesh->setGeometry(verts, prims, GL_LINES);
@@ -57,10 +86,7 @@ RectCollider::RectCollider(const Vector2f& tl, const Vector2f& tr, const Vector2
 }
 
 RectCollider::~RectCollider() {
-    delete axisTop;
-    delete axisLeft;
-    delete axisBottom;
-    delete axisRight;
+    delete mesh;
 }
 
 Vector2f RectCollider::transformXZCoordinates(const Vector2f& xzCoordinates, const Matrix4x4f& worldMatrix) {
@@ -70,12 +96,12 @@ Vector2f RectCollider::transformXZCoordinates(const Vector2f& xzCoordinates, con
     return Vector2f(transform.x, transform.z);
 }
 
-bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider& other) {
+bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider* other) {
     Line2f colLines[4];
-    colLines[0] = other.top;
-    colLines[1] = other.right;
-    colLines[2] = other.bottom;
-    colLines[3] = other.left;
+    colLines[0] = other->top;
+    colLines[1] = other->right;
+    colLines[2] = other->bottom;
+    colLines[3] = other->left;
     
     for (int i = 0; i < 4; i++) {
         if (line.intersects(colLines[i])) {
@@ -86,7 +112,7 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     return false;
 }
 
-bool RectCollider::collides(const RectCollider& other, CollisionDir& collisionSide) const {
+bool RectCollider::collides(const RectCollider* other, CollisionDir& collisionSide) const {
     collisionSide = CollisionDir::None;
     
     if (lineSegmentIntersectsCollider(top, other)) {
@@ -127,7 +153,7 @@ void RectCollider::update(const Matrix4x4f& worldMat) {
 
 void RectCollider::render() const {
     worldMatrixUniform->setValue(worldMatrix);
-    colorUniform->setValue(Vector4f(0.f, 0.f, 1.f, 1.f));
+    colorUniform->setValue(Vector4f(0.f, 0.f, 0.f, 1.f));
     
     mesh->render();
 }
