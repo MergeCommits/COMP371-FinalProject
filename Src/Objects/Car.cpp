@@ -16,14 +16,12 @@ Car::Car(Shader* shd, Shader* colliderShd) {
     renderingMode = GL_FILL;
 
     collider = new RectCollider(
-                            Vector2f(-0.5f, 0.5f),
-                            Vector2f(0.5f, 0.5f),
-                            Vector2f(-0.5f, -0.5f),
-                            Vector2f(0.5f, -0.5f),
+                            Vector2f(-2.f, 4.5f),
+                            Vector2f(2.f, 4.5f),
+                            Vector2f(-2.f, -3.75f),
+                            Vector2f(2.f, -3.75f),
                             colliderShd
                             );
-    
-    colliderScale = Vector2f(4.f, 8.f);
     
     Cube* bottom = new Cube(shd);
     bottom->setScale(4.f, 0.5f, 6.f);
@@ -38,7 +36,7 @@ Car::Car(Shader* shd, Shader* colliderShd) {
     front->setScale(3.f, 1.f, 1.5f);
     front->setPosition(0.f, 1.f, 3.75f);
     Cube* back = new Cube(shd);
-    back->setScale(3.f, 1.f, 1.5f);
+    back->setScale(3.f, 1.f, 0.75f);
     back->setPosition(0.f, 1.f, -3.375f);
 
     // Sides of the car.
@@ -290,7 +288,7 @@ void Car::updateTireRotation(WalkInput input, float speed) {
 bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     Vector3f newPosition = position.add(Vector3f(deltaPositionXZ.x, 0.f, deltaPositionXZ.y));
     Vector3f newRotation = rotation.add(Vector3f(0.f, deltaRotationY, 0.f));
-    collider->update(Matrix4x4f::constructWorldMat(newPosition, Vector3f(colliderScale.x, 1.f, colliderScale.y), newRotation));
+    collider->update(Matrix4x4f::constructWorldMat(newPosition, Vector3f::one, newRotation));
     
     bool didCollide = false;
     for (int i = 0; i < (int)allCars.size(); i++) {
@@ -306,7 +304,7 @@ bool Car::deltaPositionCausesCollision(const Car* collidedCar) {
     
     if (didCollide) {
         // Restore original collider.
-        collider->update(Matrix4x4f::constructWorldMat(position, Vector3f(colliderScale.x, 1.f, colliderScale.y), rotation));
+        collider->update(Matrix4x4f::constructWorldMat(position, Vector3f::one, rotation));
     }
     
     return didCollide;

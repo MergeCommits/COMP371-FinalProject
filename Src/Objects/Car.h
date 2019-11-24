@@ -35,7 +35,6 @@ private:
     Vector2f velocity;
     Vector2f acceleration;
     Vector3f scale;
-    Vector2f colliderScale;
     Vector3f rotation;
     float deltaRotationY;
     float tireRotation;
