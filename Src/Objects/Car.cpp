@@ -153,6 +153,10 @@ void Car::addRotationY(float bruh) {
     rotation.y += bruh;
 }
 
+float Car::getRotationY() const {
+    return rotation.y;
+}
+
 void Car::addRotationZ(float bruh) {
     rotation.z += bruh;
     for (int i = 0; i < (int)parts.size(); i++) {

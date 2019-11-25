@@ -1,6 +1,8 @@
 #ifndef PLAYER_H_INCLUDED
 #define PLAYER_H_INCLUDED
 
+#include "../Math/Vector.h"
+
 class Camera;
 class Car;
 struct GLFWwindow;
@@ -20,6 +22,7 @@ public:
     Camera* getCamera() const;
     
     void setCarShader(Shader* shd);
+    Vector3f getCarPosition() const;
     
     void update(float timestep, GLFWwindow* window);
     void render() const;

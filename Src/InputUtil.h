@@ -1,7 +1,7 @@
 #ifndef INPUTUTIL_H_INCLUDED
 #define INPUTUTIL_H_INCLUDED
 
-class GLFWwindow;
+struct GLFWwindow;
 
 class InputUtil {
 public:

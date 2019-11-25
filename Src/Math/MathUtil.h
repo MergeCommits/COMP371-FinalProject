@@ -17,6 +17,7 @@ public:
     
     static float minFloat(float val1, float val2);
     static float maxFloat(float val1, float val2);
+    static float absFloat(float val);
 };
 
 #endif // MATH_H_INCLUDED

@@ -10,6 +10,7 @@
 #include "InputUtil.h"
 #include "Timing.h"
 #include "Controllers/Player.h"
+#include "Controllers/AI.h"
 #include "Objects/Car.h"
 #include "Primitives/Grid.h"
 #include "Primitives/Quad.h"
@@ -132,8 +133,35 @@ int main() {
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(shadowPassShader);
     
-    Car* dummy = new Car(shadowPassShader, defaultShader);
-    dummy->addPositionXZ(Vector2f(10.f, -5.f));
+    std::vector<AI*> aiCars;
+    aiCars.push_back(new AI(defaultShader, defaultShader));
+    aiCars.push_back(new AI(defaultShader, defaultShader));
+    aiCars.push_back(new AI(defaultShader, defaultShader));
+    aiCars.push_back(new AI(defaultShader, defaultShader));
+    aiCars.push_back(new AI(defaultShader, defaultShader));
+    
+    float MIN_RANGE_BETWEEN_CARS = 10.f;
+    std::vector<Vector2f> usedPositions;
+    usedPositions.push_back(Vector2f(player->getCarPosition().x, player->getCarPosition().z));
+    for (int i = 0; i < (int)aiCars.size(); i++) {
+        Vector2f spawnPosition;
+        bool validPosition = false;
+        do {
+            spawnPosition.x = (std::rand() % 100) - 50.f;
+            spawnPosition.y = (std::rand() % 100) - 50.f;
+            
+            validPosition = true;
+            for (int i = 0; i < (int)usedPositions.size(); i++) {
+                if (MathUtil::absFloat(spawnPosition.x - usedPositions[i].x) < MIN_RANGE_BETWEEN_CARS || MathUtil::absFloat(spawnPosition.y - usedPositions[i].y) < MIN_RANGE_BETWEEN_CARS) {
+                    validPosition = false;
+                    break;
+                }
+            }
+        } while (!validPosition);
+            
+        aiCars[i]->getCar()->addPositionXZ(spawnPosition);
+        usedPositions.push_back(spawnPosition);
+    }
 
     // Models.
 
@@ -195,8 +223,11 @@ int main() {
             glfwPollEvents();
             
             updateInputs(timestep, window, player->getCamera());
+            
             player->update(timestep, window);
-            dummy->update(Car::WalkInput::None, 0.f);
+            for (int i = 0; i < (int)aiCars.size(); i++) {
+                aiCars[i]->update(timestep);
+            }
 
 			light->update();
             
@@ -225,6 +256,11 @@ int main() {
             grid->render();
             player->setCarShader(depthPassShader);
             player->render();
+            for (int i = 0; i < (int)aiCars.size(); i++) {
+                aiCars[i]->setCarShader(depthPassShader);
+                aiCars[i]->render();
+            }
+            
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
             // Reset viewport.
@@ -245,15 +281,21 @@ int main() {
             shadowPassShader->getVec3fUniform("lightPosition")->setValue(light->getPosition());
             shadowPassShader->getMat4Uniform("lightViewMatrix")->setValue(light->getViewMatrix());
             shadowPassShader->getMat4Uniform("lightProjectionMatrix")->setValue(light->getProjectionMatrix());
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, depthMapTextureID);
-            grass->activate(1);
+            
+            if (enableTextures) {
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, depthMapTextureID);
+                grass->activate(1);
+            }
+            
             grid->setShader(shadowPassShader);
             grid->render();
             player->setCarShader(shadowPassShader);
             player->render();
-            
-            dummy->render();
+            for (int i = 0; i < (int)aiCars.size(); i++) {
+                aiCars[i]->setCarShader(shadowPassShader);
+                aiCars[i]->render();
+            }
 
             glDisable(GL_DEPTH_TEST);
             xAxis->render();
@@ -279,7 +321,6 @@ int main() {
 
     delete light;
     delete player;
-    delete dummy;
     delete grid;
     delete xAxis;
     delete yAxis;
@@ -291,6 +332,11 @@ int main() {
     delete shadowPassShader;
     delete quad;
     delete testTex;
+    
+    for (int i = 0; i < (int)aiCars.size(); i++) {
+        delete aiCars[i];
+    }
+    aiCars.clear();
 
     // Shutdown GLFW
     glfwTerminate();

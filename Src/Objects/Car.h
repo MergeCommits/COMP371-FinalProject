@@ -65,6 +65,7 @@ public:
     void addScale(float sca);
     void addRotationX(float bruh);
     void addRotationY(float bruh);
+    float getRotationY() const;
     void addRotationZ(float bruh);
     void setRenderingMode(GLenum mode);
     

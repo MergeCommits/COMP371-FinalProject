@@ -119,7 +119,7 @@ Vector3f Vector3f::normalize() const {
     return multiply(1.f/length());
 }
 
-Vector3f Vector3f::invert() const {
+Vector3f Vector3f::negate() const {
     return Vector3f(-x, -y, -z);
 }
 

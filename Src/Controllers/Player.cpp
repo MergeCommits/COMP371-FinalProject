@@ -10,6 +10,7 @@
 
 Player::Player(Shader* shd, Shader* colliderShd, int camWidth, int camHeight) {
     car = new Car(shd, colliderShd);
+    car->addPositionXZ(Vector2f(0.f, -15.f));
     camera = new Camera(camWidth, camHeight);
     camera->addAngle(MathUtil::PI, 0.f);
 
@@ -28,6 +29,10 @@ Camera* Player::getCamera() const {
 
 void Player::setCarShader(Shader* shd) {
     car->setShader(shd);
+}
+
+Vector3f Player::getCarPosition() const {
+    return car->getPosition();
 }
 
 int lastKeyCState = GLFW_RELEASE;

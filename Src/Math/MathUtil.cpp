@@ -31,3 +31,8 @@ float MathUtil::maxFloat(float val1, float val2) {
     if (val1 >= val2) { return val1; }
     return val2;
 }
+
+float MathUtil::absFloat(float val) {
+    if (val < 0.f) { val = -val; }
+    return val;
+}
