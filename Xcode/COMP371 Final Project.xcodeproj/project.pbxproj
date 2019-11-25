@@ -33,6 +33,7 @@
 		193AD10B232A9227007879F4 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 193AD10A232A9227007879F4 /* Mesh.cpp */; };
 		19537E95238B2873008E4ADE /* AI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19537E94238B2873008E4ADE /* AI.cpp */; };
 		19537E98238B2B52008E4ADE /* InputUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19537E97238B2B52008E4ADE /* InputUtil.cpp */; };
+		19537EB3238B90E9008E4ADE /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19537EB2238B90E9008E4ADE /* Sprite.cpp */; };
 		19624A5323463662006291CE /* Shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = 19624A5223463651006291CE /* Shaders */; };
 		197123C82347F9F3006A7739 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 197123C72347F9F3006A7739 /* Texture.cpp */; };
 		1980EDAB236B07CD003AF87E /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1980EDAA236B07CD003AF87E /* Player.cpp */; };
@@ -101,6 +102,8 @@
 		19537E94238B2873008E4ADE /* AI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AI.cpp; sourceTree = "<group>"; };
 		19537E96238B2B52008E4ADE /* InputUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InputUtil.h; sourceTree = "<group>"; };
 		19537E97238B2B52008E4ADE /* InputUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputUtil.cpp; sourceTree = "<group>"; };
+		19537EB1238B90E9008E4ADE /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		19537EB2238B90E9008E4ADE /* Sprite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
 		19624A5223463651006291CE /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 		197123C62347F9F3006A7739 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		197123C72347F9F3006A7739 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
@@ -256,6 +259,8 @@
 				193AD109232A9227007879F4 /* Mesh.h */,
 				193AD0F5232A83DF007879F4 /* Shader.cpp */,
 				193AD0F4232A83DF007879F4 /* Shader.h */,
+				19537EB2238B90E9008E4ADE /* Sprite.cpp */,
+				19537EB1238B90E9008E4ADE /* Sprite.h */,
 				197123C72347F9F3006A7739 /* Texture.cpp */,
 				197123C62347F9F3006A7739 /* Texture.h */,
 			);
@@ -333,6 +338,7 @@
 				197123C82347F9F3006A7739 /* Texture.cpp in Sources */,
 				193AD0E8232A8276007879F4 /* MathUtil.cpp in Sources */,
 				1922754823889B3800A1335C /* Cube.cpp in Sources */,
+				19537EB3238B90E9008E4ADE /* Sprite.cpp in Sources */,
 				1922754723889B3800A1335C /* Triangle.cpp in Sources */,
 				1980EDAB236B07CD003AF87E /* Player.cpp in Sources */,
 				19537E95238B2873008E4ADE /* AI.cpp in Sources */,

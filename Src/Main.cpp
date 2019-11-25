@@ -19,6 +19,7 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Sprite.h"
 #include "Math/MathUtil.h"
 
 int width = 1024;
@@ -111,6 +112,9 @@ int main() {
     imageShader->addVec2VertexInput("position");
     imageShader->addVec2VertexInput("uv");
     
+    Shader* spriteShader = new Shader("Shaders/Sprite/");
+    spriteShader->addVec2VertexInput("position");
+    
     Shader* depthPassShader = new Shader("Shaders/DepthPass/");
     depthPassShader->addVec3VertexInput("position");
     depthPassShader->addVec3VertexInput("normal");
@@ -131,7 +135,11 @@ int main() {
     player->getCamera()->setPosition(Vector3f(0.f, 7.f, -10.f));
     player->getCamera()->addAngle(MathUtil::PI / 2.f, 0.f);
     player->getCamera()->addShader(defaultShader);
+    player->getCamera()->addShader(spriteShader);
     player->getCamera()->addShader(shadowPassShader);
+    
+    Sprite* sprt = new Sprite(spriteShader);
+    sprt->setScale(5.f);
     
     // AI cars.
     float AI_CAR_AMOUNT = 5;
@@ -234,6 +242,8 @@ int main() {
             }
 
 			light->update();
+            sprt->addRotation(5.f * timestep);
+            sprt->update();
             
             timing->subtractTick();
         }
@@ -301,6 +311,8 @@ int main() {
                 aiCars[i]->render();
             }
 
+            sprt->render();
+            
             glDisable(GL_DEPTH_TEST);
             xAxis->render();
             yAxis->render();

@@ -183,6 +183,23 @@ Shader::Uniform* Shader::getVec3fUniform(const String& name) {
     return uf;
 }
 
+Shader::Uniform* Shader::getVec2fUniform(const String& name) {
+    for (int i = 0; i < (int)uniformVars.size(); i++) {
+        if (uniformVars[i]->name.equals(name)) {
+            if (uniformVars[i]->type != Uniform::Kind::Vector2f) {
+                throw std::runtime_error("Attempted to assign vec3 value to non-vec2 type!");
+            }
+            return uniformVars[i];
+        }
+    }
+
+    // This isn't here, make it.
+    Uniform* uf = new Uniform(Uniform::Kind::Vector2f, glGetUniformLocation(shaderProgramID, name.cstr()));
+    uf->name = name;
+    uniformVars.push_back(uf);
+    return uf;
+}
+
 Shader::Uniform* Shader::getIntUniform(const String& name) {
     for (int i = 0; i < (int)uniformVars.size(); i++) {
         if (uniformVars[i]->name.equals(name)) {
@@ -257,6 +274,9 @@ void Shader::use() const {
             case Uniform::Kind::Vector3f: {
                 glUniform3f(uf->location, uf->value.vec3Val.x, uf->value.vec3Val.y, uf->value.vec3Val.z);
             } break;
+            case Uniform::Kind::Vector2f: {
+                glUniform2f(uf->location, uf->value.vec2Val.x, uf->value.vec2Val.y);
+            } break;
             case Uniform::Kind::Integer: {
                 glUniform1i(uf->location, uf->value.intVal);
             } break;
@@ -304,6 +324,13 @@ void Shader::Uniform::setValue(Vector3f value) {
         throw std::runtime_error("Attempted to assign vec3 value to non-vec3 type!");
     }
     this->value.vec3Val = value;
+}
+
+void Shader::Uniform::setValue(Vector2f value) {
+    if (type != Kind::Vector2f) {
+        throw std::runtime_error("Attempted to assign vec2 value to non-vec2 type!");
+    }
+    this->value.vec2Val = value;
 }
 
 void Shader::Uniform::setValue(int value) {

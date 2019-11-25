@@ -16,6 +16,7 @@ public:
             Matrix4x4f matrixVal;
             Vector4f vec4Val;
             Vector3f vec3Val;
+            Vector2f vec2Val;
             int intVal;
             bool boolVal;
         };
@@ -25,6 +26,7 @@ public:
             Matrix,
             Vector4f,
             Vector3f,
+            Vector2f,
             Integer,
             Boolean
         };
@@ -37,6 +39,7 @@ public:
         void setValue(Matrix4x4f value);
         void setValue(Vector4f value);
         void setValue(Vector3f value);
+        void setValue(Vector2f value);
         void setValue(int value);
         void setValue(bool value);
     };
@@ -68,6 +71,7 @@ public:
     Uniform* getMat4Uniform(const String& name);
     Uniform* getVec4fUniform(const String& name);
     Uniform* getVec3fUniform(const String& name);
+    Uniform* getVec2fUniform(const String& name);
     Uniform* getIntUniform(const String& name);
     Uniform* getBoolUniform(const String& name);
     void use() const;
