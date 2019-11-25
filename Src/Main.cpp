@@ -19,7 +19,7 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Sprite.h"
+#include "Objects/Smoke.h"
 #include "Math/MathUtil.h"
 
 int width = 1024;
@@ -94,6 +94,10 @@ int main() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
     // Fixed time steps.
     Timing* timing = new Timing(60);
     
@@ -138,8 +142,7 @@ int main() {
     player->getCamera()->addShader(spriteShader);
     player->getCamera()->addShader(shadowPassShader);
     
-    Sprite* sprt = new Sprite(spriteShader);
-    sprt->setScale(5.f);
+    Smoke* smok = new Smoke(spriteShader, Vector3f::zero);
     
     // AI cars.
     float AI_CAR_AMOUNT = 5;
@@ -242,8 +245,7 @@ int main() {
             }
 
 			light->update();
-            sprt->addRotation(5.f * timestep);
-            sprt->update();
+            smok->update(timestep);
             
             timing->subtractTick();
         }
@@ -311,7 +313,7 @@ int main() {
                 aiCars[i]->render();
             }
 
-            sprt->render();
+            smok->render();
             
             glDisable(GL_DEPTH_TEST);
             xAxis->render();
