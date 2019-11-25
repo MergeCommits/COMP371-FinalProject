@@ -133,23 +133,27 @@ int main() {
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(shadowPassShader);
     
+    // AI cars.
+    float AI_CAR_AMOUNT = 5;
     std::vector<AI*> aiCars;
-    aiCars.push_back(new AI(defaultShader, defaultShader));
-    aiCars.push_back(new AI(defaultShader, defaultShader));
-    aiCars.push_back(new AI(defaultShader, defaultShader));
-    aiCars.push_back(new AI(defaultShader, defaultShader));
-    aiCars.push_back(new AI(defaultShader, defaultShader));
+    for (int i = 0; i < AI_CAR_AMOUNT; i++) {
+        aiCars.push_back(new AI(defaultShader, defaultShader));
+    }
     
+    // Ensure that the randomly placed cars don't spawn inside each other.
     float MIN_RANGE_BETWEEN_CARS = 10.f;
     std::vector<Vector2f> usedPositions;
     usedPositions.push_back(Vector2f(player->getCarPosition().x, player->getCarPosition().z));
+    
     for (int i = 0; i < (int)aiCars.size(); i++) {
         Vector2f spawnPosition;
         bool validPosition = false;
         do {
+            // Randomly pick a spawn position.
             spawnPosition.x = (std::rand() % 100) - 50.f;
             spawnPosition.y = (std::rand() % 100) - 50.f;
             
+            // Check if the position is too close to a pre-existing car.
             validPosition = true;
             for (int i = 0; i < (int)usedPositions.size(); i++) {
                 if (MathUtil::absFloat(spawnPosition.x - usedPositions[i].x) < MIN_RANGE_BETWEEN_CARS || MathUtil::absFloat(spawnPosition.y - usedPositions[i].y) < MIN_RANGE_BETWEEN_CARS) {

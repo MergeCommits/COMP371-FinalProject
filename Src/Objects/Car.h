@@ -4,6 +4,7 @@
 #include <vector>
 #include <GL/glew.h>
 
+#include "RectCollider.h"
 #include "../Math/Vector.h"
 #include "../Math/Matrix.h"
 
@@ -11,7 +12,6 @@ class Cube;
 class Wheel;
 class Shader;
 class Texture;
-class RectCollider;
 
 class Car {
 public:
@@ -24,7 +24,7 @@ public:
     };
     
 private:
-    static std::vector<const Car*> allCars;
+    static std::vector<Car*> allCars;
     
     const float INPUT_ACCELERATION = 1.f;
     const float TURN_SPEED = 7.f;
@@ -50,11 +50,13 @@ private:
     Wheel* wheels[4];
     RectCollider* collider;
     
+    Vector2f getDirectionVector(RectCollider::CollisionDir dir);
+    
     void updateAcceleration(WalkInput input, float speed);
     void updateVelocity(Car::WalkInput input, float timestep);
     void updatePosition(WalkInput input);
     void updateTireRotation(WalkInput input, float speed);
-    bool deltaPositionCausesCollision(const Car* collidedCar);
+    bool deltaPositionCausesCollision(int& collidedCar, RectCollider::CollisionDir& dir);
     
 public:
     Car(Shader* shd, Shader* colliderShd);

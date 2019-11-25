@@ -96,7 +96,7 @@ Vector2f RectCollider::transformXZCoordinates(const Vector2f& xzCoordinates, con
     return Vector2f(transform.x, transform.z);
 }
 
-bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider* other) {
+bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectCollider* other, CollisionDir& collisionSide) {
     Line2f colLines[4];
     colLines[0] = other->top;
     colLines[1] = other->right;
@@ -105,6 +105,7 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
     
     for (int i = 0; i < 4; i++) {
         if (line.intersects(colLines[i])) {
+            collisionSide = (CollisionDir)i;
             return true;
         }
     }
@@ -115,23 +116,16 @@ bool RectCollider::lineSegmentIntersectsCollider(const Line2f& line, const RectC
 bool RectCollider::collides(const RectCollider* other, CollisionDir& collisionSide) const {
     collisionSide = CollisionDir::None;
     
-    if (lineSegmentIntersectsCollider(top, other)) {
-        collisionSide = CollisionDir::Top;
+    if (lineSegmentIntersectsCollider(top, other, collisionSide)) {
         return true;
     }
-    
-    if (lineSegmentIntersectsCollider(right, other)) {
-        collisionSide = CollisionDir::Right;
+    if (lineSegmentIntersectsCollider(right, other, collisionSide)) {
         return true;
     }
-    
-    if (lineSegmentIntersectsCollider(bottom, other)) {
-        collisionSide = CollisionDir::Bottom;
+    if (lineSegmentIntersectsCollider(bottom, other, collisionSide)) {
         return true;
     }
-    
-    if (lineSegmentIntersectsCollider(left, other)) {
-        collisionSide = CollisionDir::Left;
+    if (lineSegmentIntersectsCollider(left, other, collisionSide)) {
         return true;
     }
     
@@ -156,4 +150,12 @@ void RectCollider::render() const {
     colorUniform->setValue(Vector4f(0.f, 0.f, 0.f, 1.f));
     
     mesh->render();
+}
+
+const RectCollider::CollisionDir operator&(const RectCollider::CollisionDir& a, const RectCollider::CollisionDir& b) {
+    return (RectCollider::CollisionDir)((int)a & (int)b);
+}
+
+const RectCollider::CollisionDir operator|(const RectCollider::CollisionDir& a, const RectCollider::CollisionDir& b) {
+    return (RectCollider::CollisionDir)((int)a | (int)b);
 }
