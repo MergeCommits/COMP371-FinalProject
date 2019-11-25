@@ -216,15 +216,12 @@ void Car::update(Car::WalkInput input, float timestep) {
     RectCollider::CollisionDir collDir;
     if (deltaPositionCausesCollision(collidedCarIndex, collDir)) {
         float SPEED_MULTIPLIER = 10.f;
-//        bool pushOtherCar = (std::rand() % 2) == 1;
-        bool pushOtherCar = false;
         Car* collidedCar = allCars[collidedCarIndex];
-
+        bool pushOtherCar = (std::rand() % 2) == 1;
         if (pushOtherCar) {
             collidedCar->velocity = velocity.multiply(SPEED_MULTIPLIER);
-        } else {
-            velocity = collidedCar->getDirectionVector(collDir).multiply(SPEED_MULTIPLIER);
         }
+        velocity = collidedCar->getDirectionVector(collDir).multiply(SPEED_MULTIPLIER);
 
         deltaPositionXZ = Vector2f::zero;
         deltaRotationY = 0.f;
