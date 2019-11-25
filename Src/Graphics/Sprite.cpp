@@ -10,7 +10,7 @@ Sprite::Sprite(Shader* shd) {
     if (err != GL_NO_ERROR) {
         throw std::runtime_error("Uncaught exception - Sprite(Shader* shd).");
     }
-    
+
     mesh = new Mesh(shd);
     std::vector<float> verts = {
         -0.5f, 0.5f,
@@ -23,12 +23,12 @@ Sprite::Sprite(Shader* shd) {
         0, 3, 1
     };
     mesh->setGeometry(verts, prims);
-    
+
     modelMatrixUniform = shd->getMat4Uniform("modelMatrix");
     scaleUniform = shd->getVec2fUniform("scale");
     rotationMatrixUniform = shd->getMat4Uniform("rotationMatrix");
     colorUniform = shd->getVec4fUniform("spriteColor");
-    
+
     scale = Vector2f::one;
 	rotation = 0.f;
 }
@@ -54,7 +54,6 @@ void Sprite::setOpacity(float value) {
 }
 
 void Sprite::update() {
-    // TODO: Convert to matrix functions.
     modelMatrix = Matrix4x4f::translate(position);
     float sinRoll = sin(rotation);
     float cosRoll = cos(rotation);
