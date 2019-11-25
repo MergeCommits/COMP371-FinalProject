@@ -42,7 +42,7 @@ bool debugDepthMap = false;
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void windowSizeCallback(GLFWwindow* window, int w, int h);
-void updateInputs(float timestep, GLFWwindow* window, Camera* cam);
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam, std::vector<AI*>& aiCars);
 
 int main() {
     // Give std::rand the current time as a seed.
@@ -222,7 +222,7 @@ int main() {
             mouseYDiff = 0.f;
             glfwPollEvents();
             
-            updateInputs(timestep, window, player->getCamera());
+            updateInputs(timestep, window, player->getCamera(), aiCars);
             
             player->update(timestep, window);
             for (int i = 0; i < (int)aiCars.size(); i++) {
@@ -370,8 +370,9 @@ int lastKeySpaceState = GLFW_RELEASE;
 int lastKeyXState = GLFW_RELEASE;
 int lastKeyBState = GLFW_RELEASE;
 int lastKeyKState = GLFW_RELEASE;
+int lastKeyHState = GLFW_RELEASE;
 
-void updateInputs(float timestep, GLFWwindow* window, Camera* cam) {
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam, std::vector<AI*>& aiCars) {
     // Cursor position.
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -391,6 +392,13 @@ void updateInputs(float timestep, GLFWwindow* window, Camera* cam) {
     // Toggle depth map view.
     if (InputUtil::keyHit(window, GLFW_KEY_K, lastKeyKState)) {
         debugDepthMap = !debugDepthMap;
+    }
+    
+    // Toggle AI.
+    if (InputUtil::keyHit(window, GLFW_KEY_H, lastKeyHState)) {
+        for (int i = 0; i < (int)aiCars.size(); i++) {
+            aiCars[i]->toggleBrainFreeze();
+        }
     }
     
     cam->addAngle(mouseXDiff, mouseYDiff);

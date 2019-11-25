@@ -11,6 +11,8 @@ private:
     
     Car::WalkInput currTaskDirection;
     int stepsUntilNewTask;
+    
+    bool brainFreeze;
 
 public:
     AI(Shader* shd, Shader* colliderShd);
@@ -21,6 +23,7 @@ public:
     
     Car::WalkInput getCurrentTaskDirection();
     void updateCurrentTaskDirection();
+    void toggleBrainFreeze();
     
     void updateFarInput(Car::WalkInput& input);
     void updateNearInput(Car::WalkInput& input);
