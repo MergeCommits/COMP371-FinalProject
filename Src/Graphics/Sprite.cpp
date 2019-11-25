@@ -1,5 +1,6 @@
 #include <cmath>
 #include <vector>
+#include <stdexcept>
 
 #include "Sprite.h"
 #include "Mesh.h"

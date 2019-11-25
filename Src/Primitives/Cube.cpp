@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "Cube.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 
 Cube::Cube(Shader* shd) {
     GLuint err = glGetError();

@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "RectCollider.h"
 #include "../Graphics/Mesh.h"
 

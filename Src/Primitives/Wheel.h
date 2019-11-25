@@ -1,7 +1,7 @@
 #ifndef WHEEL_H_INCLUDED
 #define WHEEL_H_INCLUDED
 
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 class Mesh;
 

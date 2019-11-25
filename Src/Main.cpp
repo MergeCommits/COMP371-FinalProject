@@ -7,8 +7,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include "InputUtil.h"
-#include "Timing.h"
+#include "Utils/InputUtil.h"
+#include "Utils/Timing.h"
 #include "Controllers/Player.h"
 #include "Controllers/AI.h"
 #include "Objects/Car.h"

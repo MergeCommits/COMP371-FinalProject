@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 #include "Triangle.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 
 Triangle::Triangle(Shader* shd) {
     GLuint err = glGetError();

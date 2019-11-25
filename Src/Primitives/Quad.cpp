@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "Quad.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 
 Quad::Quad(Shader* shd) {
     GLuint err = glGetError();

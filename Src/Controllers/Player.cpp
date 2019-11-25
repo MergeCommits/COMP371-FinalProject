@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Player.h"
-#include "../InputUtil.h"
+#include "../Utils/InputUtil.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Camera.h"
 #include "../Objects/Car.h"

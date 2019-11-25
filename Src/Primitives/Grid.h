@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 class Mesh;
 

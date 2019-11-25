@@ -4,7 +4,7 @@
 #include "../Math/Vector.h"
 #include "../Math/Matrix.h"
 #include "../Math/Line.h"
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 class Mesh;
 

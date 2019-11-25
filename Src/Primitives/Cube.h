@@ -1,7 +1,7 @@
 #ifndef CUBE_H_INCLUDED
 #define CUBE_H_INCLUDED
 
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 class Mesh;
 

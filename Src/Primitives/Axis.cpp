@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "Axis.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 
 Axis::Axis(Shader* shd) {
     GLuint err = glGetError();

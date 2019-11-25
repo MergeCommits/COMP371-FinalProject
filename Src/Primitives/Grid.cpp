@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "Grid.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 
 Grid::Grid(Shader* shd) {
     GLuint err = glGetError();

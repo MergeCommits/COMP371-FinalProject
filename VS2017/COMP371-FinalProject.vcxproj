@@ -11,43 +11,56 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\Controllers\AI.cpp" />
     <ClCompile Include="..\Src\Controllers\Player.cpp" />
-    <ClCompile Include="..\Src\Graphics\Axis.cpp" />
     <ClCompile Include="..\Src\Graphics\Camera.cpp" />
-    <ClCompile Include="..\Src\Graphics\Car.cpp" />
-    <ClCompile Include="..\Src\Graphics\Cube.cpp" />
-    <ClCompile Include="..\Src\Graphics\Grid.cpp" />
     <ClCompile Include="..\Src\Graphics\Mesh.cpp" />
-    <ClCompile Include="..\Src\Graphics\Quad.cpp" />
     <ClCompile Include="..\Src\Graphics\Shader.cpp" />
+    <ClCompile Include="..\Src\Graphics\Sprite.cpp" />
     <ClCompile Include="..\Src\Graphics\Texture.cpp" />
-    <ClCompile Include="..\Src\Graphics\Triangle.cpp" />
-    <ClCompile Include="..\Src\Graphics\Wheel.cpp" />
     <ClCompile Include="..\Src\Main.cpp" />
+    <ClCompile Include="..\Src\Math\Line.cpp" />
     <ClCompile Include="..\Src\Math\MathUtil.cpp" />
     <ClCompile Include="..\Src\Math\Matrix.cpp" />
     <ClCompile Include="..\Src\Math\Vector.cpp" />
-    <ClCompile Include="..\Src\Timing.cpp" />
+    <ClCompile Include="..\Src\Objects\Car.cpp" />
+    <ClCompile Include="..\Src\Objects\RectCollider.cpp" />
+    <ClCompile Include="..\Src\Objects\Smoke.cpp" />
+    <ClCompile Include="..\Src\Primitives\Axis.cpp" />
+    <ClCompile Include="..\Src\Primitives\Cube.cpp" />
+    <ClCompile Include="..\Src\Primitives\Grid.cpp" />
+    <ClCompile Include="..\Src\Primitives\Quad.cpp" />
+    <ClCompile Include="..\Src\Primitives\Triangle.cpp" />
+    <ClCompile Include="..\Src\Primitives\Wheel.cpp" />
+    <ClCompile Include="..\Src\Utils\InputUtil.cpp" />
     <ClCompile Include="..\Src\Utils\String.cpp" />
+    <ClCompile Include="..\Src\Utils\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Src\Controllers\AI.h" />
     <ClInclude Include="..\Src\Controllers\Player.h" />
-    <ClInclude Include="..\Src\Graphics\Axis.h" />
     <ClInclude Include="..\Src\Graphics\Camera.h" />
-    <ClInclude Include="..\Src\Graphics\Car.h" />
-    <ClInclude Include="..\Src\Graphics\Cube.h" />
-    <ClInclude Include="..\Src\Graphics\Grid.h" />
     <ClInclude Include="..\Src\Graphics\Mesh.h" />
-    <ClInclude Include="..\Src\Graphics\Quad.h" />
     <ClInclude Include="..\Src\Graphics\Shader.h" />
+    <ClInclude Include="..\Src\Graphics\Sprite.h" />
     <ClInclude Include="..\Src\Graphics\Texture.h" />
-    <ClInclude Include="..\Src\Graphics\Triangle.h" />
-    <ClInclude Include="..\Src\Graphics\Wheel.h" />
+    <ClInclude Include="..\Src\Math\Line.h" />
     <ClInclude Include="..\Src\Math\MathUtil.h" />
     <ClInclude Include="..\Src\Math\Matrix.h" />
     <ClInclude Include="..\Src\Math\Vector.h" />
-    <ClInclude Include="..\Src\Timing.h" />
+    <ClInclude Include="..\Src\Objects\Car.h" />
+    <ClInclude Include="..\Src\Objects\RectCollider.h" />
+    <ClInclude Include="..\Src\Objects\Smoke.h" />
+    <ClInclude Include="..\Src\Primitives\Axis.h" />
+    <ClInclude Include="..\Src\Primitives\Cube.h" />
+    <ClInclude Include="..\Src\Primitives\Grid.h" />
+    <ClInclude Include="..\Src\Primitives\Quad.h" />
+    <ClInclude Include="..\Src\Primitives\Triangle.h" />
+    <ClInclude Include="..\Src\Primitives\Wheel.h" />
+    <ClInclude Include="..\Src\Utils\InputUtil.h" />
+    <ClInclude Include="..\Src\Utils\OBJ_Loader.h" />
     <ClInclude Include="..\Src\Utils\String.h" />
+    <ClInclude Include="..\Src\Utils\Timing.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{277EAE68-9EED-4EFF-BAD3-2A70787A3E8D}</ProjectGuid>

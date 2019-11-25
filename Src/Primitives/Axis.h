@@ -1,7 +1,7 @@
 #ifndef AXIS_H_INCLUDED
 #define AXIS_H_INCLUDED
 
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 class Mesh;
 

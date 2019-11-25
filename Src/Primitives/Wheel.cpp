@@ -1,5 +1,5 @@
 #include "Wheel.h"
-#include "Mesh.h"
+#include "../Graphics/Mesh.h"
 #include "../Utils/OBJ_Loader.h"
 #include "../Math/MathUtil.h"
 
