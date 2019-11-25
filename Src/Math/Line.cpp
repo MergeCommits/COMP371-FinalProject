@@ -16,6 +16,16 @@ Line2f::Line2f(float ax, float ay, float bx, float by) {
     pointA = Vector2f(ax, ay); pointB = Vector2f(bx, by);
 }
 
+static bool all4BooleansEqual(bool arr[4]) {
+    bool firstValue = arr[0];
+    for (int i = 1; i < 4; i++) {
+        if (arr[i] != firstValue) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool Line2f::intersects(const Line2f& other) const {
     Vector2f r = pointB.subtract(pointA);
     Vector2f s = other.pointB.subtract(other.pointA);
@@ -36,17 +46,23 @@ bool Line2f::intersects(const Line2f& other) const {
         }
 
         // Do they overlap? Are all the point differences in either direction the same sign?
-        bool allXHaveSameSign = (other.pointA.x - pointA.x < 0)
-            && (other.pointA.x - pointB.x < 0)
-            && (other.pointB.x - pointA.x < 0)
-            && (other.pointB.x - pointB.x < 0);
-        if (allXHaveSameSign) { return true; }
+        bool allXDiffs[4] = {
+            other.pointA.x - pointA.x < 0,
+            other.pointA.x - pointB.x < 0,
+            other.pointB.x - pointA.x < 0,
+            other.pointB.x - pointB.x < 0
+        };
+        if (!all4BooleansEqual(allXDiffs)) {
+            return true;
+        }
 
-        bool allYHaveSameSign = (other.pointA.y - pointA.y < 0)
-            && (other.pointA.y - pointB.y < 0)
-            && (other.pointB.y - pointA.y < 0)
-            && (other.pointB.y - pointB.y < 0);
-        return allYHaveSameSign;
+        bool allYDiffs[4] = {
+            other.pointA.y - pointA.y < 0,
+            other.pointA.y - pointB.y < 0,
+            other.pointB.y - pointA.y < 0,
+            other.pointB.y - pointB.y < 0
+        };
+        return !all4BooleansEqual(allYDiffs);
     }
 
     if (MathUtil::eqFloats(denominator, 0.f)) {
