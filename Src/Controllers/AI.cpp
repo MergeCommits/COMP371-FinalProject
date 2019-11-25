@@ -2,8 +2,8 @@
 
 #include "AI.h"
 
-AI::AI(Shader* shd, Shader* colliderShd) {
-    car = new Car(shd, colliderShd);
+AI::AI(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
+    car = new Car(shd, colliderShd, spriteShd);
     
     stepsUntilNewTask = 0;
     currTaskDirection = Car::WalkInput::None;
@@ -69,7 +69,7 @@ void AI::update(float timestep) {
         return;
     }
     
-    float MIN_DISTANCE_TO_ORIGIN_BEFORE_RANDOM_MOVEMENT_SQUARED = 30.f * 30.f;
+    float MIN_DISTANCE_TO_ORIGIN_BEFORE_RANDOM_MOVEMENT_SQUARED = 20.f * 20.f;
     float distanceToOriginSquared = car->getPosition().lengthSquared();
     Car::WalkInput input = Car::WalkInput::Forward;
     

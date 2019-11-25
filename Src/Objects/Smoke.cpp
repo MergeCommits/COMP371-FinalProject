@@ -13,6 +13,10 @@ Smoke::~Smoke() {
     delete sprite;
 }
 
+bool Smoke::isMarkedForRemoval() const {
+    return markedForRemoval;
+}
+
 void Smoke::update(float timestep) {
     if (markedForRemoval) { return; }
     
@@ -20,6 +24,7 @@ void Smoke::update(float timestep) {
     float frac = age / LIFESPAN;
     sprite->setOpacity(1.f - frac);
     sprite->setScale(MIN_SCALE + (RANGE * frac));
+    sprite->update();
     
     if (age >= LIFESPAN) {
         markedForRemoval = true;

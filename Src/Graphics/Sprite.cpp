@@ -53,7 +53,7 @@ void Sprite::setOpacity(float value) {
 
 void Sprite::update() {
     // TODO: Convert to matrix functions.
-    modelMatrix = Matrix4x4f::constructWorldMat(position, Vector3f::one, Vector3f::zero);
+    modelMatrix = Matrix4x4f::translate(position);
     float sinRoll = sin(rotation);
     float cosRoll = cos(rotation);
     rotationMatrix = Matrix4x4f(cosRoll,-sinRoll,0.f,0.f,

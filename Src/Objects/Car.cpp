@@ -6,11 +6,12 @@
 #include "../Primitives/Wheel.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
+#include "../Objects/Smoke.h"
 #include "../Math/MathUtil.h"
 
 std::vector<Car*> Car::allCars;
 
-Car::Car(Shader* shd, Shader* colliderShd) {
+Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
     allCars.push_back(this);
 
     renderingMode = GL_FILL;
@@ -98,6 +99,8 @@ Car::Car(Shader* shd, Shader* colliderShd) {
     tireRotation = 0.f;
     deltaRotationY = 0.f;
     scale = Vector3f::one;
+    
+    spriteShader = spriteShd;
 }
 
 Car::~Car() {
@@ -117,6 +120,10 @@ Car::~Car() {
             allCars.erase(allCars.begin() + i);
             break;
         }
+    }
+    
+    for (int i = 0; i < (int)smokeParticles.size(); i++) {
+        delete smokeParticles[i];
     }
 }
 
@@ -231,6 +238,15 @@ void Car::update(Car::WalkInput input, float timestep) {
 
     deltaPositionXZ = Vector2f::zero;
     deltaRotationY = 0.f;
+    
+    for (int i = 0; i < (int)smokeParticles.size(); i++) {
+        smokeParticles[i]->update(timestep);
+        if (smokeParticles[i]->isMarkedForRemoval()) {
+            delete smokeParticles[i];
+            smokeParticles.erase(smokeParticles.begin() + i);
+            i--;
+        }
+    }
 }
 
 void Car::updateAcceleration(Car::WalkInput input, float speed) {
@@ -239,10 +255,10 @@ void Car::updateAcceleration(Car::WalkInput input, float speed) {
 
     Vector2f targetDir = Vector2f::zero;
     if ((input & WalkInput::Forward) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(sinAngle,cosAngle));
+        targetDir = targetDir.add(Vector2f(sinAngle, cosAngle));
     }
     if ((input & WalkInput::Backward) != WalkInput::None) {
-        targetDir = targetDir.add(Vector2f(-sinAngle,-cosAngle));
+        targetDir = targetDir.add(Vector2f(-sinAngle, -cosAngle));
     }
 
     if (targetDir.lengthSquared() < 0.01f) { return; }
@@ -254,6 +270,8 @@ void Car::updateAcceleration(Car::WalkInput input, float speed) {
     }
 
     acceleration = targetDir.normalize().multiply(speed);
+    Vector3f particlePosition = position;
+    smokeParticles.push_back(new Smoke(spriteShader, particlePosition));
 }
 
 void Car::updateVelocity(Car::WalkInput input, float timestep) {
@@ -384,6 +402,9 @@ void Car::render() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     collider->render();
+    for (int i = 0; i < (int)smokeParticles.size(); i++) {
+        smokeParticles[i]->render();
+    }
 }
 
 const Car::WalkInput operator&(const Car::WalkInput& a, const Car::WalkInput& b) {

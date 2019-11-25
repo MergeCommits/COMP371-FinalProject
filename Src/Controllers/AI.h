@@ -15,7 +15,7 @@ private:
     bool brainFreeze;
 
 public:
-    AI(Shader* shd, Shader* colliderShd);
+    AI(Shader* shd, Shader* colliderShd, Shader* spriteShd);
     ~AI();
     
     void setCarShader(Shader* shd);

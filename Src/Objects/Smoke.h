@@ -8,18 +8,20 @@ class Sprite;
 
 class Smoke {
 private:
-    const float MIN_SCALE = 2.f;
-    const float RANGE = 20.f - MIN_SCALE;
+    const float MIN_SCALE = 0.2f;
+    const float RANGE = 4.f - MIN_SCALE;
     
     Sprite* sprite;
     
-    const float LIFESPAN = 2.f;
+    const float LIFESPAN = 1.f;
     float age;
     bool markedForRemoval;
     
 public:
     Smoke(Shader* shd, const Vector3f& position);
     ~Smoke();
+    
+    bool isMarkedForRemoval() const;
     
     void update(float timestep);
     void render() const;

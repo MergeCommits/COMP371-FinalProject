@@ -19,7 +19,6 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
-#include "Objects/Smoke.h"
 #include "Math/MathUtil.h"
 
 int width = 1024;
@@ -135,20 +134,18 @@ int main() {
     }
     
     // Players.
-    Player* player = new Player(defaultShader, defaultShader, width, height);
+    Player* player = new Player(defaultShader, defaultShader, spriteShader, width, height);
     player->getCamera()->setPosition(Vector3f(0.f, 7.f, -10.f));
     player->getCamera()->addAngle(MathUtil::PI / 2.f, 0.f);
     player->getCamera()->addShader(defaultShader);
     player->getCamera()->addShader(spriteShader);
     player->getCamera()->addShader(shadowPassShader);
     
-    Smoke* smok = new Smoke(spriteShader, Vector3f::zero);
-    
     // AI cars.
     float AI_CAR_AMOUNT = 5;
     std::vector<AI*> aiCars;
     for (int i = 0; i < AI_CAR_AMOUNT; i++) {
-        aiCars.push_back(new AI(defaultShader, defaultShader));
+        aiCars.push_back(new AI(defaultShader, defaultShader, spriteShader));
     }
     
     // Ensure that the randomly placed cars don't spawn inside each other.
@@ -245,7 +242,6 @@ int main() {
             }
 
 			light->update();
-            smok->update(timestep);
             
             timing->subtractTick();
         }
@@ -312,8 +308,6 @@ int main() {
                 aiCars[i]->setCarShader(shadowPassShader);
                 aiCars[i]->render();
             }
-
-            smok->render();
             
             glDisable(GL_DEPTH_TEST);
             xAxis->render();

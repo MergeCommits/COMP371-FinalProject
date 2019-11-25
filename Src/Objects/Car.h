@@ -12,6 +12,7 @@ class Cube;
 class Wheel;
 class Shader;
 class Texture;
+class Smoke;
 
 class Car {
 public:
@@ -46,6 +47,9 @@ private:
     Texture* metalTexture;
     Texture* tireTexture;
     
+    Shader* spriteShader;
+    std::vector<Smoke*> smokeParticles;
+    
     std::vector<Cube*> parts;
     Wheel* wheels[4];
     RectCollider* collider;
@@ -59,7 +63,7 @@ private:
     bool deltaPositionCausesCollision(int& collidedCar, RectCollider::CollisionDir& dir);
     
 public:
-    Car(Shader* shd, Shader* colliderShd);
+    Car(Shader* shd, Shader* colliderShd, Shader* spriteShd);
     ~Car();
     
     void addPositionXZ(const Vector2f& vect);
