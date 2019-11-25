@@ -14,8 +14,6 @@ std::vector<Car*> Car::allCars;
 Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
     allCars.push_back(this);
 
-    renderingMode = GL_FILL;
-
     collider = new RectCollider(
                             Vector2f(-2.f, 4.5f),
                             Vector2f(2.f, 4.5f),
@@ -40,6 +38,11 @@ Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
     back->setScale(3.f, 1.f, 0.75f);
     back->setPosition(0.f, 1.f, -3.375f);
 
+	parts.push_back(bottom);
+	parts.push_back(roof);
+	parts.push_back(front);
+	parts.push_back(back);
+
     // Sides of the car.
     Cube* leftWall = new Cube(shd);
     leftWall->setScale(0.5f, 1.f, 6.f);
@@ -53,6 +56,11 @@ Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
     Cube* backWall = new Cube(shd);
     backWall->setScale(3.f, 1.f, 0.5f);
     backWall->setPosition(0.f, 1.f, -2.75f);
+
+	parts.push_back(leftWall);
+	parts.push_back(rightWall);
+	parts.push_back(frontWall);
+	parts.push_back(backWall);
 
     // Supports for the roof.
     Cube* topLeftPillar = new Cube(shd);
@@ -68,6 +76,43 @@ Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
     botRightPillar->setScale(0.5f, 1.5f, 0.5f);
     botRightPillar->setPosition(1.75f, 2.f, -2.75f);
 
+	parts.push_back(topLeftPillar);
+	parts.push_back(topRightPillar);
+	parts.push_back(botLeftPillar);
+	parts.push_back(botRightPillar);
+
+	// Headlights and taillights.
+	Vector3f headlightScale = Vector3f(0.5f, 0.3f, 0.1f);
+	Vector3f headlightPosition = Vector3f(-1.f, 1.25f, 4.55f);
+	Vector4f headlightColor = Vector4f::one;
+
+	Cube* headlightLeft = new Cube(shd);
+	headlightLeft->setScale(headlightScale);
+	headlightLeft->setPosition(headlightPosition);
+	headlightLeft->color = headlightColor;
+	Cube* headlightRight = new Cube(shd);
+	headlightRight->setScale(headlightScale);
+	headlightRight->setPosition(headlightPosition.add(Vector3f(2.f, 0.f, 0.f)));
+	headlightRight->color = headlightColor;
+
+	Vector3f taillightScale = headlightScale;
+	Vector3f taillightPosition = Vector3f(-1.f, 1.25f, -3.8f);
+	Vector4f taillightColor = Vector4f(1.f, 0.2f, 0.f, 1.f);
+
+	Cube* taillightLeft = new Cube(shd);
+	taillightLeft->setScale(taillightScale);
+	taillightLeft->setPosition(taillightPosition);
+	taillightLeft->color = taillightColor;
+	Cube* taillightRight = new Cube(shd);
+	taillightRight->setScale(taillightScale);
+	taillightRight->setPosition(taillightPosition.add(Vector3f(2.f, 0.f, 0.f)));
+	taillightRight->color = taillightColor;
+
+	parts.push_back(headlightLeft);
+	parts.push_back(headlightRight);
+	parts.push_back(taillightLeft);
+	parts.push_back(taillightRight);
+
     wheels[0] = new Wheel(shd);
     wheels[0]->setPosition(2.f, 0.f, 2.5f);
     wheels[1] = new Wheel(shd);
@@ -81,24 +126,13 @@ Car::Car(Shader* shd, Shader* colliderShd, Shader* spriteShd) {
         wheels[i]->color = Vector4f(0.2f, 0.2f, 0.2f, 1.f);
     }
 
-    parts.push_back(bottom);
-    parts.push_back(roof);
-    parts.push_back(front);
-    parts.push_back(back);
-    parts.push_back(leftWall);
-    parts.push_back(rightWall);
-    parts.push_back(frontWall);
-    parts.push_back(backWall);
-    parts.push_back(topLeftPillar);
-    parts.push_back(topRightPillar);
-    parts.push_back(botLeftPillar);
-    parts.push_back(botRightPillar);
-
     metalTexture = new Texture("Textures/metal.jpg");
     tireTexture = new Texture("Textures/tire.png");
     tireRotation = 0.f;
     deltaRotationY = 0.f;
     scale = Vector3f::one;
+
+	enableHeadlightsAndTailights = true;
     
     spriteShader = spriteShd;
 }
@@ -174,8 +208,8 @@ void Car::addRotationZ(float bruh) {
     }
 }
 
-void Car::setRenderingMode(GLenum mode) {
-    renderingMode = mode;
+void Car::toggleHeadlightsTaillights() {
+	enableHeadlightsAndTailights = !enableHeadlightsAndTailights;
 }
 
 Vector2f Car::getDirectionVector(RectCollider::CollisionDir dir) {
@@ -390,16 +424,17 @@ void Car::setShader(Shader* shd) {
 }
 
 void Car::render() {
-    glPolygonMode(GL_FRONT_AND_BACK, renderingMode);
+	int renderPartCount = (int)parts.size();
+	if (!enableHeadlightsAndTailights) { renderPartCount -= 4; }
+
     metalTexture->activate(1);
-    for (int i = 0; i < (int)parts.size(); i++) {
+    for (int i = 0; i < renderPartCount; i++) {
         parts[i]->render();
     }
     tireTexture->activate(1);
     for (int i = 0; i < 4; i++) {
         wheels[i]->render();
     }
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     collider->render();
     for (int i = 0; i < (int)smokeParticles.size(); i++) {

@@ -67,9 +67,11 @@ public:
 
     Cube(Shader* shd);
 
+	void setPosition(const Vector3f& vect);
     void setPosition(float x, float y, float z);
     void addPositionXZ(const Vector2f& vect);
-    void setScale(float x, float y, float z);
+	void setScale(const Vector3f& vect);
+	void setScale(float x, float y, float z);
     void addRotationX(float bruh);
     void addRotationY(float bruh);
     void addRotationZ(float bruh);

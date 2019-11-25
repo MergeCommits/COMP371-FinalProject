@@ -42,7 +42,7 @@ bool debugDepthMap = false;
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void windowSizeCallback(GLFWwindow* window, int w, int h);
-void updateInputs(float timestep, GLFWwindow* window, Camera* cam, std::vector<AI*>& aiCars);
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam, Player* player, std::vector<AI*>& aiCars);
 
 int main() {
     // Give std::rand the current time as a seed.
@@ -234,7 +234,7 @@ int main() {
             mouseYDiff = 0.f;
             glfwPollEvents();
             
-            updateInputs(timestep, window, player->getCamera(), aiCars);
+            updateInputs(timestep, window, player->getCamera(), player, aiCars);
             
             player->update(timestep, window);
             for (int i = 0; i < (int)aiCars.size(); i++) {
@@ -383,8 +383,9 @@ int lastKeyXState = GLFW_RELEASE;
 int lastKeyBState = GLFW_RELEASE;
 int lastKeyKState = GLFW_RELEASE;
 int lastKeyHState = GLFW_RELEASE;
+int lastKeyLState = GLFW_RELEASE;
 
-void updateInputs(float timestep, GLFWwindow* window, Camera* cam, std::vector<AI*>& aiCars) {
+void updateInputs(float timestep, GLFWwindow* window, Camera* cam, Player* player, std::vector<AI*>& aiCars) {
     // Cursor position.
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -405,13 +406,21 @@ void updateInputs(float timestep, GLFWwindow* window, Camera* cam, std::vector<A
     if (InputUtil::keyHit(window, GLFW_KEY_K, lastKeyKState)) {
         debugDepthMap = !debugDepthMap;
     }
-    
-    // Toggle AI.
-    if (InputUtil::keyHit(window, GLFW_KEY_H, lastKeyHState)) {
-        for (int i = 0; i < (int)aiCars.size(); i++) {
-            aiCars[i]->toggleBrainFreeze();
-        }
-    }
+
+	// Toggle AI.
+	if (InputUtil::keyHit(window, GLFW_KEY_H, lastKeyHState)) {
+		for (int i = 0; i < (int)aiCars.size(); i++) {
+			aiCars[i]->toggleBrainFreeze();
+		}
+	}
+
+	// Toggle headlights and taillights.
+	if (InputUtil::keyHit(window, GLFW_KEY_L, lastKeyLState)) {
+		player->toggleCarHeadlightsTaillight();
+		for (int i = 0; i < (int)aiCars.size(); i++) {
+			aiCars[i]->getCar()->toggleHeadlightsTaillights();
+		}
+	}
     
     cam->addAngle(mouseXDiff, mouseYDiff);
 }

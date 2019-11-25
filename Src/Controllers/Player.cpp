@@ -35,6 +35,10 @@ Vector3f Player::getCarPosition() const {
     return car->getPosition();
 }
 
+void Player::toggleCarHeadlightsTaillight() {
+	car->toggleHeadlightsTaillights();
+}
+
 int lastKeyCState = GLFW_RELEASE;
 
 void Player::update(float timestep, GLFWwindow* window) {

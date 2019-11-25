@@ -30,6 +30,7 @@ Sprite::Sprite(Shader* shd) {
     colorUniform = shd->getVec4fUniform("spriteColor");
     
     scale = Vector2f::one;
+	rotation = 0.f;
 }
 
 Sprite::~Sprite() {

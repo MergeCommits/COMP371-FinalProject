@@ -23,6 +23,7 @@ public:
     
     void setCarShader(Shader* shd);
     Vector3f getCarPosition() const;
+	void toggleCarHeadlightsTaillight();
     
     void update(float timestep, GLFWwindow* window);
     void render() const;

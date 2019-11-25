@@ -46,15 +46,15 @@ bool Line2f::intersects(const Line2f& other) const {
         }
 
         // Do they overlap? Are all the point differences in either direction the same sign?
-        bool allXDiffs[4] = {
-            other.pointA.x - pointA.x < 0,
-            other.pointA.x - pointB.x < 0,
-            other.pointB.x - pointA.x < 0,
-            other.pointB.x - pointB.x < 0
-        };
-        if (!all4BooleansEqual(allXDiffs)) {
-            return true;
-        }
+		bool allXDiffs[4] = {
+			other.pointA.x - pointA.x < 0,
+			other.pointA.x - pointB.x < 0,
+			other.pointB.x - pointA.x < 0,
+			other.pointB.x - pointB.x < 0
+		};
+		if (!all4BooleansEqual(allXDiffs)) {
+			return true;
+		}
 
         bool allYDiffs[4] = {
             other.pointA.y - pointA.y < 0,

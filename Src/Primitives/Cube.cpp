@@ -36,13 +36,21 @@ Cube::Cube(Shader* shd) {
     scale = Vector3f::one;
 }
 
+void Cube::setPosition(const Vector3f& vect) {
+	position = vect;
+}
+
 void Cube::setPosition(float x, float y, float z) {
-    position = Vector3f(x, y, z);
+	position = Vector3f(x, y, z);
 }
 
 void Cube::addPositionXZ(const Vector2f& vect) {
     position.x += vect.x;
     position.z += vect.y;
+}
+
+void Cube::setScale(const Vector3f& vect) {
+	scale = vect;
 }
 
 void Cube::setScale(float x, float y, float z) {

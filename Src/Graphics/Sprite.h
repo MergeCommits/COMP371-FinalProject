@@ -13,7 +13,6 @@ private:
     Shader::Uniform* colorUniform;
 
     Mesh* mesh;
-    Shader* shader;
 
     Vector3f position;
     Vector2f scale;

@@ -40,7 +40,8 @@ private:
     Vector3f rotation;
     float deltaRotationY;
     float tireRotation;
-    GLenum renderingMode;
+
+	bool enableHeadlightsAndTailights;
     
     Matrix4x4f rotationMatrix;
     
@@ -73,7 +74,8 @@ public:
     void addRotationY(float bruh);
     float getRotationY() const;
     void addRotationZ(float bruh);
-    void setRenderingMode(GLenum mode);
+
+	void toggleHeadlightsTaillights();
     
     Matrix4x4f getRotationMatrix() const;
     
