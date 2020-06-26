@@ -8,7 +8,7 @@ class Camera {
 private:
     float xAngle;
     float yAngle;
-    // The range of the the yAngle field before it is clamped.
+    // The range of the yAngle field before it is clamped.
     float yAngleLimit;
     float tilt;
 
